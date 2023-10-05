@@ -1,0 +1,13 @@
+name: Mirror noetic to main
+
+on:
+  push:
+    branches: [ noetic ]
+
+jobs:
+  mirror-to-master:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: zofrex/mirror-branch@v1
+      with:
+        target-branch: main
