@@ -1,22 +1,18 @@
 <?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-<package format="3">
+<package format="2">
   <name>tuos_ros</name>
-  <version>0.0.1</version>
-  <description>
-    A meta-package containing ROS 2 (Foxy) packages for Tom's ROS course at the University of Sheffield
-  </description>
-  
+  <version>0.0.0</version>
+  <description>The TUoS ROS meta-package</description>
+
   <maintainer email="t.howard@sheffield.ac.uk">Tom Howard</maintainer>
-  <license>TODO</license>
-  <url type="website">https://tom-howard.github.io/ros2/</url>
-  <url type="repository">https://github.com/tom-howard/tuos_ros</url>
-  
-  <buildtool_depend>ament_cmake</buildtool_depend>
-  
+  <license>CC BY-NC</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <!-- <exec_depend>com2009_simulations</exec_depend> -->
+  <exec_depend>tuos_examples</exec_depend>
   <exec_depend>tuos_msgs</exec_depend>
-    
-  <export>
-    <build_type>ament_cmake</build_type>
-  </export>
+  <exec_depend>tuos_simulations</exec_depend>
+  <!-- <exec_depend>tuos_tb3_tools</exec_depend> -->
+  <export><metapackage/></export>
+
 </package>
