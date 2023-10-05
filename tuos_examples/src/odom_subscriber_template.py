@@ -25,7 +25,7 @@ class OdomSubscriber():
         # "orientation" data is in quaternions, so we need to convert this 
         # using the "euler_from_quaternion" function 
         # See here for further details:
-        # https://tom-howard.github.io/ros/com2009/la1/week2/#euler_angs
+        # https://tom-howard.github.io/ros/com2009/assignment1/part2/#euler_angs
 
         # Add your code here!
 
@@ -47,10 +47,10 @@ class OdomSubscriber():
         
         self.counter = 0       # What's this bit for, do you think?
 
-    def main_loop(self):
+    def main(self):
         # set the node to remain active until closed manually:
         rospy.spin()
 
 if __name__ == '__main__':
-    subscriber_instance = OdomSubscriber()
-    subscriber_instance.main_loop()
+    node = OdomSubscriber()
+    node.main()
