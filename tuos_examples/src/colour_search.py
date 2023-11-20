@@ -13,7 +13,7 @@ from sensor_msgs.msg import Image
 # Import some other modules from within this package
 from tb3 import Tb3Move
 
-class colour_search(object):
+class ColourSearch():
 
     def __init__(self):
         node_name = "turn_and_face"
@@ -107,8 +107,8 @@ class colour_search(object):
             self.rate.sleep()
             
 if __name__ == '__main__':
-    search_instance = colour_search()
+    node = ColourSearch()
     try:
-        search_instance.main()
+        node.main()
     except rospy.ROSInterruptException:
         pass
