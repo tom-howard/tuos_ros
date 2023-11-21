@@ -20,12 +20,15 @@ from math import radians
 import datetime as dt
 from pathlib import Path
 
-class camerasweepActionServer():
+class CameraSweepActionServer():
     feedback = CameraSweepFeedback() 
     result = CameraSweepResult()
 
     def __init__(self):
-        self.actionserver = actionlib.SimpleActionServer("/camera_sweep_action_server", 
+        self.server_name = "camera_sweep_action_server"
+        rospy.init_node(self.server_name)
+
+        self.actionserver = actionlib.SimpleActionServer(self.server_name, 
             CameraSweepAction, self.action_server_launcher, auto_start=False)
         self.actionserver.start()
 
@@ -66,7 +69,7 @@ class camerasweepActionServer():
         full_sweep_time = radians(goal.sweep_angle)/abs(turn_vel)
 
         print(f"\n#####\n"
-            f"The 'camera_sweep_action_server' has been called.\n"
+            f"The '{self.server_name}' has been called.\n"
             f"Goal: capture {goal.image_count} images over a {goal.sweep_angle} degree sweep...\n\n"
             f"An image will therefore be captured every {ang_incs:.3f} degrees,\n"
             f"and the full sweep will take {full_sweep_time:.5f} seconds.\n\n"
@@ -122,8 +125,10 @@ class camerasweepActionServer():
             rospy.loginfo("Camera sweep completed successfully.")
             self.actionserver.set_succeeded(self.result)
             self.robot_controller.stop()
-            
+
+    def main(self):
+        rospy.spin()
+
 if __name__ == '__main__':
-    rospy.init_node("camera_sweep_action_server")
-    camerasweepActionServer()
-    rospy.spin()
+    node = CameraSweepActionServer()
+    node.main()
