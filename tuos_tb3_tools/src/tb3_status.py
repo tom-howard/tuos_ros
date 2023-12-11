@@ -47,6 +47,7 @@ class tb3Status():
     
     def battery_callback(self, topic_data: BatteryState):
         self.battery_voltage = topic_data.voltage
+        self.capacity = int(min((60 * self.battery_voltage) - 650, 100)) # Approx. percentage (capped at 100%)
     
     def check_active_nodes(self):
         self.active_nodes = rosnode.get_node_names()
@@ -62,6 +63,7 @@ class tb3Status():
             msg.value = 1
             rospy.loginfo("--------------------------")
             rospy.loginfo(f"{hostname} is up and running!")
+            rospy.loginfo("--------------------------")
             self.beeper.publish(msg)
         
         first_update = False
@@ -84,7 +86,7 @@ class tb3Status():
                           f"{'Status: ':>16}OK\n"
                           f"{'Active Nodes: ':>16}{len(self.active_nodes)}\n"
                           f"{'Up Time: ':>16}{runtimestring} {minsecs}\n"
-                          f"{'Voltage: ':>16}{self.battery_voltage:.2f} V"
+                          f"{'Voltage: ':>16}{self.battery_voltage:.2f} V (~{self.capacity} %)"
                     )
                 else:
                     print(
