@@ -86,7 +86,7 @@ class tb3Status():
                           f"{'Status: ':>16}OK\n"
                           f"{'Active Nodes: ':>16}{len(self.active_nodes)}\n"
                           f"{'Up Time: ':>16}{runtimestring} {minsecs}\n"
-                          f"{'Voltage: ':>16}{self.battery_voltage:.2f}V [~{self.capacity}%]"
+                          f"{'Voltage: ':>16}{self.battery_voltage:.2f}V [{self.capacity}%]"
                     )
                 else:
                     print(
