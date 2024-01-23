@@ -37,12 +37,12 @@
       </visual>
     </link>
     <link name='YEL'>
-      <pose frame=''>-1.04 0 0.2 0 0 0</pose>
+      <pose frame=''>-1.04 0 0.125 0 0 0</pose>
       <collision name='coll'>
         <geometry>
           <cylinder>
-            <radius>0.215</radius>
-            <length>0.4</length>
+            <radius>0.1</radius>
+            <length>0.25</length>
           </cylinder>
         </geometry>
         <max_contacts>10</max_contacts>
@@ -59,8 +59,8 @@
       <visual name='vis'>
         <geometry>
           <cylinder>
-            <radius>0.215</radius>
-            <length>0.4</length>
+            <radius>0.1</radius>
+            <length>0.25</length>
           </cylinder>
         </geometry>
         <material>
@@ -72,12 +72,12 @@
       </visual>
     </link>
     <link name='PRP'>
-      <pose frame=''>0 1.08321 0.2 0 0 0</pose>
+      <pose frame=''>0 1.08321 0.125 0 0 0</pose>
       <collision name='coll'>
         <geometry>
           <cylinder>
-            <radius>0.215</radius>
-            <length>0.4</length>
+            <radius>0.1</radius>
+            <length>0.25</length>
           </cylinder>
         </geometry>
         <max_contacts>10</max_contacts>
@@ -94,8 +94,8 @@
       <visual name='vis'>
         <geometry>
           <cylinder>
-            <radius>0.215</radius>
-            <length>0.4</length>
+            <radius>0.1</radius>
+            <length>0.25</length>
           </cylinder>
         </geometry>
         <material>
@@ -107,12 +107,12 @@
       </visual>
     </link>
     <link name='TRQ'>
-      <pose frame=''>0 -1.08320 0.2 0 0 0</pose>
+      <pose frame=''>0 -1.08320 0.125 0 0 0</pose>
       <collision name='coll'>
         <geometry>
           <cylinder>
-            <radius>0.215</radius>
-            <length>0.4</length>
+            <radius>0.1</radius>
+            <length>0.25</length>
           </cylinder>
         </geometry>
         <max_contacts>10</max_contacts>
@@ -129,8 +129,8 @@
       <visual name='vis'>
         <geometry>
           <cylinder>
-            <radius>0.215</radius>
-            <length>0.4</length>
+            <radius>0.1</radius>
+            <length>0.25</length>
           </cylinder>
         </geometry>
         <material>
@@ -142,12 +142,12 @@
       </visual>
     </link>
     <link name='BLU'>
-      <pose frame=''>1.04 0 0.2 0 0 0</pose>
+      <pose frame=''>1.04 0 0.125 0 0 0</pose>
       <collision name='coll'>
         <geometry>
           <cylinder>
-            <radius>0.215</radius>
-            <length>0.4</length>
+            <radius>0.1</radius>
+            <length>0.25</length>
           </cylinder>
         </geometry>
         <max_contacts>10</max_contacts>
@@ -164,8 +164,8 @@
       <visual name='vis'>
         <geometry>
           <cylinder>
-            <radius>0.215</radius>
-            <length>0.4</length>
+            <radius>0.1</radius>
+            <length>0.25</length>
           </cylinder>
         </geometry>
         <material>
