@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+"""
+See here for further info:
+https://tom-howard.github.io/ros/extras/launch-files/roslaunch-api/
+"""
+
+import rospy
+# Import the "argparse" library:
+import argparse
+from pathlib import Path
+
+node_name = "pointless_file_generator"
+
+# Command-Line Interface:
+cli = argparse.ArgumentParser(description=f"Command-line interface for the '{node_name}' node.")
+cli.add_argument(
+    "-f", "--file", 
+    help="Full path to a pointless text file (no file extension required)"
+)
+
+# obtain the arguments passed to this node from the command-line:
+args = cli.parse_args(rospy.myargv()[1:])
+
+txt = """
+This is a pointless text file!
+
+Perhaps you created this file by calling this node from another node, as per the example at:
+https://tom-howard.github.io/ros/extras/launch-files/roslaunch-api/
+
+Hint: The same process could be applied to calling the 'map_saver' node from the 'map_server' package
+(... you did this from the command line in Assignment #1 Part 3).
+
+"""
+
+if args.file == None:
+    print("No file name provided.")
+    
+else:
+    fname = Path(args.file)
+    dest = Path.joinpath(Path.cwd(), fname.parent, fname.stem)
+    dest = dest.parent / f"{dest.name}.txt"
+    print(f"Writing a pointless text file to: {dest}")
+    dest.write_text(txt)
