@@ -3,7 +3,7 @@
 A simple ROS publisher node with a Command-line Interface (CLI)
 
 See here for further info:
-https://github.com/tom-howard/COM2009/wiki/Launch-Files
+https://tom-howard.github.io/ros/extras/launch-files/
 """
 
 import rospy
