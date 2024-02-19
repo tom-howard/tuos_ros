@@ -6,7 +6,7 @@
 
   <maintainer email="t.howard@sheffield.ac.uk">Tom Howard</maintainer>
   <license>CC BY-NC</license>
-  <url type="website">https://github.com/tom-howard/COM2009/tree/main/com2009_simulations</url>
+  <url type="website">https://github.com/tom-howard/tuos_ros/tree/main/com2009_simulations</url>
   
   <buildtool_depend>catkin</buildtool_depend>
   
