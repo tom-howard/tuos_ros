@@ -33,11 +33,16 @@ Hint: The same process could be applied to calling the 'map_saver' node from the
 """
 
 if args.file == None:
-    print("No file name provided.")
+    print("[FAILED] No file name provided.")
     
 else:
     fname = Path(args.file)
     dest = Path.joinpath(Path.cwd(), fname.parent, fname.stem)
-    dest = dest.parent / f"{dest.name}.txt"
-    print(f"Writing a pointless text file to: {dest}")
-    dest.write_text(txt)
+    try:
+        dest.parent.mkdir(parents=True, exist_ok=True)
+    except PermissionError:
+        print(f"[FAILED] You don't have permission to write to the destination:\n    {dest.parent}")
+    else:
+        dest = dest.parent / f"{dest.name}.txt"
+        print(f"[INFO] Writing a pointless text file to:\n    {dest}")
+        dest.write_text(txt)
