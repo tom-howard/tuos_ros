@@ -148,8 +148,8 @@ class Lidar():
         # front:
         left = scan_data.ranges[0:20+1]
         right = scan_data.ranges[-20:]
-        full_arc = np.array(left[::-1] + right[::-1])
-        self.distance.front = strip_oor(full_arc)
+        left_right = np.array(left[::-1] + right[::-1])
+        self.distance.front = strip_oor(left_right)
         
         # right subsets:
         self.distance.r1 = lidar_subset(320, 340)
