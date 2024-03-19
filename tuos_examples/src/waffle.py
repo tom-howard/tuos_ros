@@ -2,7 +2,6 @@
 """
 A module for handling key Waffle Operations
 Like the tb3.py module, but more advanced!
-Enjoy!
 
 Tom Howard, March 2024
 """
@@ -30,12 +29,12 @@ class Motion():
         if abs(linear) > 0.26:
             lin_org = linear
             linear = np.sign(linear) * 0.26
-            if self.dbg: print(f"LINEAR velocity limited to {linear} m/s ({lin_org} m/s requested).")
+            if self.dbg: rospy.logwarn(f"LINEAR velocity limited to {linear} m/s ({lin_org} m/s requested).")
 
         if abs(angular) > 1.82:
             ang_org = angular
             angular = np.sign(angular) * 1.82
-            if self.dbg: print(f"ANGULAR velocity limited to {angular} rad/s ({ang_org} rad/s requested).")
+            if self.dbg: rospy.logwarn(f"ANGULAR velocity limited to {angular} rad/s ({ang_org} rad/s requested).")
         
         self.vel_cmd.linear.x = linear
         self.vel_cmd.angular.z = angular
@@ -53,10 +52,10 @@ class Motion():
             self.hush = False
         else:
             if last_published < self.high_rate_warn:
-                if self.dbg: print("You're sending velocity commands too quickly!\n" \
+                if self.dbg: rospy.logwarn("You're sending velocity commands too quickly!\n" \
                                 "Check your loop rates!")
             if last_published > self.low_rate_warn:
-                if self.dbg: print("You aren't publishing velocity commands quickly enough to ensure smooth motion!\n" \
+                if self.dbg: rospy.logwarn("You aren't publishing velocity commands quickly enough to ensure smooth motion!\n" \
                                 "Check your loop rates!")
 
 class Pose():
@@ -81,10 +80,10 @@ class Pose():
         self.subscriber = rospy.Subscriber('/odom', Odometry, self.odom_cb)
         self.timestamp = rospy.get_time()
         self.wait_for_odom = True
-        if self.dbg: print('Waiting for Odometry Data...')
+        if self.dbg: rospy.loginfo('Waiting for Odometry Data...')
         while self.wait_for_odom:
             continue
-        if self.dbg: print('Odometry Data is available...')
+        if self.dbg: rospy.loginfo('Odometry Data is available...')
     
     def show(self):
         """
@@ -107,10 +106,10 @@ class Lidar():
         self.distance = self.scanSubsets()
         self.subscriber = rospy.Subscriber('/scan', LaserScan, self.laserscan_cb)
         self.wait_for_lidar = True
-        if self.dbg: print('Waiting for LiDAR Data...')
+        if self.dbg: rospy.loginfo('Waiting for LiDAR Data...')
         while self.wait_for_lidar:
             continue
-        if self.dbg: print('LiDAR Data is available...')
+        if self.dbg: rospy.loginfo('LiDAR Data is available...')
     
     class scanSubsets():
         def __init__(self):
