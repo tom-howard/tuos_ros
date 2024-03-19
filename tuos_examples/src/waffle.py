@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""
+A module for handling key Waffle Operations
+Like the tb3.py module, but more advanced!
+Enjoy!
+
+Tom Howard, March 2024
+"""
 
 import rospy
 from geometry_msgs.msg import Twist
@@ -17,30 +24,34 @@ class Motion():
         self.timestamp = rospy.get_time()
         self.high_rate_warn = 1.0 / 1000.0 # seconds
         self.low_rate_warn = 1.0 / 2.0 # seconds
+        self.hush = True
 
     def set_velocity(self, linear = 0.0, angular = 0.0):
         if abs(linear) > 0.26:
             lin_org = linear
             linear = np.sign(linear) * 0.26
-            if self.dbg: print(f"LINEAR velocity limited to {linear} m/s ({lin_org} m/s was requested).")
+            if self.dbg: print(f"LINEAR velocity limited to {linear} m/s ({lin_org} m/s requested).")
 
         if abs(angular) > 1.82:
             ang_org = angular
             angular = np.sign(angular) * 1.82
-            if self.dbg: print(f"ANGULAR velocity limited to {angular} rad/s ({ang_org} rad/s was requested).")
+            if self.dbg: print(f"ANGULAR velocity limited to {angular} rad/s ({ang_org} rad/s requested).")
         
         self.vel_cmd.linear.x = linear
         self.vel_cmd.angular.z = angular
         
     def stop(self):
         self.set_velocity()
-        self.publish_velocity(quiet=True)
+        self.hush = True
+        self.publish_velocity()
 
-    def publish_velocity(self, quiet = False):
+    def publish_velocity(self):
         last_published = rospy.get_time() - self.timestamp 
         self.timestamp = rospy.get_time()
         self.publisher.publish(self.vel_cmd)
-        if not quiet:
+        if self.hush:
+            self.hush = False
+        else:
             if last_published < self.high_rate_warn:
                 if self.dbg: print("You're sending velocity commands too quickly!\n" \
                                 "Check your loop rates!")
@@ -53,7 +64,7 @@ class Pose():
         orientation = odom_data.pose.pose.orientation
         position = odom_data.pose.pose.position
         (_, _, yaw) = euler_from_quaternion([orientation.x,
-            orientation.y, orientation.z, orientation.w],'sxyz')
+            orientation.y, orientation.z, orientation.w], 'sxyz')
         
         yaw = self.round(degrees(yaw), 4)
         self.yaw_direction = np.sign(yaw)
@@ -75,10 +86,16 @@ class Pose():
             continue
         if self.dbg: print('Odometry Data is available...')
     
-    def __str__(self):
-        msg = f"posx = {self.posx:.3f} (m) posy = {self.posy:.3f} (m), yaw = {self.yaw:.1f} (degrees)"
-        return msg
-
+    def show(self):
+        """
+        A method to return the robot's current odometry 
+        Messages will only be displayed once per second, regardless of 
+        the rate at which the show() method is called.
+        """
+        if (rospy.get_time() - self.timestamp) > 1:
+            self.timestamp = rospy.get_time()
+            print(f"posx = {self.posx:.3f} (m) posy = {self.posy:.3f} (m), yaw = {self.yaw:.1f} (degrees)")
+        
     def round(self, value, precision):
         value = int(value * (10**precision))
         return float(value) / (10**precision)
@@ -97,18 +114,26 @@ class Lidar():
     
     class scanSubsets():
         def __init__(self):
-            
+            self.timestamp = rospy.get_time()
             self.front = 0.0
             self.r1 = 0.0; self.r2 = 0.0; self.r3 = 0.0; self.r4 = 0.0
             self.l1 = 0.0; self.l2 = 0.0; self.l3 = 0.0; self.l4 = 0.0
         
-        def __str__(self):
-            msg = f"              l1     front     r1          \n" \
-                  f"       l2     {self.l1:<5.3f}  {self.front:^5.3f}  {self.r1:>5.3f}     r2       \n" \
-                  f"l3     {self.l2:<5.3f}                       {self.r2:>5.3f}   r3\n" \
-                  f"{self.l3:<5.3f}                                   {self.r3:>5.3f}\n" \
-                  f"{self.l4:<5.3f} <-- l4                     r4 --> {self.r4:>5.3f}"
-            return msg
+        def show(self):
+            """
+            A function to return distance readings from each LiDAR subset
+            Messages will only be displayed once per second, regardless of 
+            the rate at which the show() method is called.
+            """
+
+            if (rospy.get_time() - self.timestamp) > 1:
+                msg = f"              l1     front     r1          \n" \
+                    f"       l2     {self.l1:<5.3f}  {self.front:^5.3f}  {self.r1:>5.3f}     r2       \n" \
+                    f"l3     {self.l2:<5.3f}                       {self.r2:>5.3f}   r3\n" \
+                    f"{self.l3:<5.3f}                                   {self.r3:>5.3f}\n" \
+                    f"{self.l4:<5.3f} <-- l4                     r4 --> {self.r4:>5.3f}"
+                self.timestamp = rospy.get_time()
+                print(msg)
                         
     def laserscan_cb(self, scan_data: LaserScan):
         
