@@ -75,10 +75,9 @@ class Pose():
             continue
         if self.dbg: print('Odometry Data is available...')
     
-    def print(self):
-        if rospy.get_time() - self.timestamp > 1:
-            self.timestamp = rospy.get_time()
-            print(f"posx = {self.posx:.3f} (m) posy = {self.posy:.3f} (m), yaw = {self.yaw:.1f} (degrees)")
+    def __str__(self):
+        msg = f"posx = {self.posx:.3f} (m) posy = {self.posy:.3f} (m), yaw = {self.yaw:.1f} (degrees)"
+        return msg
 
     def round(self, value, precision):
         value = int(value * (10**precision))
@@ -114,8 +113,8 @@ class Lidar():
     def laserscan_cb(self, scan_data: LaserScan):
         
         def strip_oor(lidar_subset):
-            valid_data = lidar_subset[lidar_subset>0.1]
-            return valid_data.mean() if np.shape(valid_data)[0] > 0 else np.nan
+            valid_data = lidar_subset[(lidar_subset > 0.1) & (lidar_subset != float("inf"))]
+            return valid_data.mean() if np.shape(valid_data)[0] > 0 else float("nan")
 
         def lidar_subset(start_index, stop_index):
             range = np.array(scan_data.ranges[start_index: stop_index+1])
