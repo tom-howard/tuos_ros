@@ -24,7 +24,6 @@ class Motion():
         self.timestamp = rospy.get_time()
         self.high_rate_warn = 1.0 / 1000.0 # seconds
         self.low_rate_warn = 1.0 / 2.0 # seconds
-        self.first = True
 
     def set_velocity(self, linear = 0.0, angular = 0.0):
         self.dbg = self._dbg_init
@@ -50,15 +49,12 @@ class Motion():
         last_published = rospy.get_time() - self.timestamp 
         self.timestamp = rospy.get_time()
         self.publisher.publish(self.vel_cmd)
-        if self.first:
-            self.first = False
-        else:
-            if last_published < self.high_rate_warn:
-                if self.dbg: rospy.logwarn("You're sending velocity commands too quickly!\n" \
-                                "Check your loop rates!")
-            if last_published > self.low_rate_warn:
-                if self.dbg: rospy.logwarn("You aren't publishing velocity commands quickly enough to ensure smooth motion!\n" \
-                                "Check your loop rates!")
+        if last_published < self.high_rate_warn:
+            if self.dbg: rospy.logwarn("You're sending velocity commands too quickly!\n" \
+                                       "Check your loop rates!")
+        if last_published > self.low_rate_warn:
+            if self.dbg: rospy.logwarn("You aren't publishing velocity commands quickly enough to ensure smooth motion!\n" \
+                                       "Check your loop rates!")
 
 class Pose():
     def odom_cb(self, odom_data: Odometry):
