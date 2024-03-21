@@ -16,6 +16,7 @@ import numpy as np
 
 class Motion():
     def __init__(self, debug = True):
+        self._dbg_init = debug
         self.dbg = debug
         self.publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
         self.publisher_rate = rospy.Rate(10) # Hz
@@ -23,9 +24,10 @@ class Motion():
         self.timestamp = rospy.get_time()
         self.high_rate_warn = 1.0 / 1000.0 # seconds
         self.low_rate_warn = 1.0 / 2.0 # seconds
-        self.hush = True
+        self.first = True
 
     def set_velocity(self, linear = 0.0, angular = 0.0):
+        self.dbg = self._dbg_init
         if abs(linear) > 0.26:
             lin_org = linear
             linear = np.sign(linear) * 0.26
@@ -40,16 +42,16 @@ class Motion():
         self.vel_cmd.angular.z = angular
         
     def stop(self):
-        self.set_velocity()
-        self.hush = True
+        self.dbg = False
+        self.vel_cmd = Twist()
         self.publish_velocity()
 
     def publish_velocity(self):
         last_published = rospy.get_time() - self.timestamp 
         self.timestamp = rospy.get_time()
         self.publisher.publish(self.vel_cmd)
-        if self.hush:
-            self.hush = False
+        if self.first:
+            self.first = False
         else:
             if last_published < self.high_rate_warn:
                 if self.dbg: rospy.logwarn("You're sending velocity commands too quickly!\n" \
@@ -103,7 +105,7 @@ class Lidar():
 
     def __init__(self, debug = True):
         self.dbg = debug
-        self.distance = self.scanSubsets()
+        self.subsets = self.scanSubsets()
         self.subscriber = rospy.Subscriber('/scan', LaserScan, self.laserscan_cb)
         self.wait_for_lidar = True
         if self.dbg: rospy.loginfo('Waiting for LiDAR Data...')
@@ -136,30 +138,30 @@ class Lidar():
                         
     def laserscan_cb(self, scan_data: LaserScan):
         
-        def strip_oor(lidar_subset):
-            valid_data = lidar_subset[(lidar_subset > 0.1) & (lidar_subset != float("inf"))]
+        def filter(get_subset):
+            valid_data = get_subset[(get_subset > 0.1) & (get_subset != float("inf"))]
             return valid_data.mean() if np.shape(valid_data)[0] > 0 else float("nan")
 
-        def lidar_subset(start_index, stop_index):
+        def get_subset(start_index, stop_index):
             range = np.array(scan_data.ranges[start_index: stop_index+1])
-            return strip_oor(range)
+            return filter(range)
 
         # front:
         left = scan_data.ranges[0:20+1]
         right = scan_data.ranges[-20:]
         left_right = np.array(left[::-1] + right[::-1])
-        self.distance.front = strip_oor(left_right)
+        self.subsets.front = filter(left_right)
         
         # right subsets:
-        self.distance.r1 = lidar_subset(320, 340)
-        self.distance.r2 = lidar_subset(300, 320)
-        self.distance.r3 = lidar_subset(275, 290)
-        self.distance.r4 = lidar_subset(250, 265)
+        self.subsets.r1 = get_subset(320, 340)
+        self.subsets.r2 = get_subset(300, 320)
+        self.subsets.r3 = get_subset(275, 290)
+        self.subsets.r4 = get_subset(250, 265)
         
         # left subsets:
-        self.distance.l1 = lidar_subset(20, 40)
-        self.distance.l2 = lidar_subset(40, 60)
-        self.distance.l3 = lidar_subset(70, 85)
-        self.distance.l4 = lidar_subset(95, 110)
+        self.subsets.l1 = get_subset(20, 40)
+        self.subsets.l2 = get_subset(40, 60)
+        self.subsets.l3 = get_subset(70, 85)
+        self.subsets.l4 = get_subset(95, 110)
         
         self.wait_for_lidar = False
