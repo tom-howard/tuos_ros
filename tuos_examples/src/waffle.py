@@ -116,9 +116,11 @@ class Lidar():
     class scanSubsets():
         def __init__(self):
             self.timestamp = rospy.get_time()
-            self.front = 0.0
+            self.front = 0.0; self.frontArray = []
             self.r1 = 0.0; self.r2 = 0.0; self.r3 = 0.0; self.r4 = 0.0
             self.l1 = 0.0; self.l2 = 0.0; self.l3 = 0.0; self.l4 = 0.0
+            self.r1Array = []; self.r2Array = []; self.r3Array = []; self.r4Array = []
+            self.l1Array = []; self.l2Array = []; self.l3Array = []; self.l4Array = []
         
         def show(self):
             """
@@ -140,7 +142,9 @@ class Lidar():
         
         def filter(get_subset):
             valid_data = get_subset[(get_subset > 0.1) & (get_subset != float("inf"))]
-            return valid_data.mean() if np.shape(valid_data)[0] > 0 else float("nan")
+            subset_array = valid_data.tolist()
+            subset_value = valid_data.mean() if np.shape(valid_data)[0] > 0 else float("nan")
+            return subset_value, subset_array
 
         def get_subset(start_index, stop_index):
             range = np.array(scan_data.ranges[start_index: stop_index+1])
@@ -150,18 +154,18 @@ class Lidar():
         left = scan_data.ranges[0:20+1]
         right = scan_data.ranges[-20:]
         left_right = np.array(left[::-1] + right[::-1])
-        self.subsets.front = filter(left_right)
+        self.subsets.front, self.subsets.frontArray = filter(left_right)
         
         # right subsets:
-        self.subsets.r1 = get_subset(320, 340)
-        self.subsets.r2 = get_subset(300, 320)
-        self.subsets.r3 = get_subset(275, 290)
-        self.subsets.r4 = get_subset(250, 265)
+        self.subsets.r1, self.subsets.r1Array = get_subset(320, 340)
+        self.subsets.r2, self.subsets.r2Array = get_subset(300, 320)
+        self.subsets.r3, self.subsets.r3Array = get_subset(275, 290)
+        self.subsets.r4, self.subsets.r4Array = get_subset(250, 265)
         
         # left subsets:
-        self.subsets.l1 = get_subset(20, 40)
-        self.subsets.l2 = get_subset(40, 60)
-        self.subsets.l3 = get_subset(70, 85)
-        self.subsets.l4 = get_subset(95, 110)
+        self.subsets.l1, self.subsets.l1Array = get_subset(20, 40)
+        self.subsets.l2, self.subsets.l2Array = get_subset(40, 60)
+        self.subsets.l3, self.subsets.l3Array = get_subset(70, 85)
+        self.subsets.l4, self.subsets.l4Array = get_subset(95, 110)
         
         self.wait_for_lidar = False
