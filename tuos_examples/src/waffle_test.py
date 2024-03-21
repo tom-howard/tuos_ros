@@ -6,7 +6,7 @@ import waffle
 node_name = "waffle_py_example"
 
 rospy.init_node(node_name, anonymous=True)
-rate = rospy.Rate(1) # hz
+rate = rospy.Rate(10) # hz
 rospy.loginfo(f"{node_name}: Initialised.")
 
 motion = waffle.Motion(debug = True)
@@ -18,13 +18,22 @@ def stop():
 
 rospy.on_shutdown(stop)
 
-motion.set_velocity(linear=0.05, angular=0.0)
+counter = 0
+inc = 1
 while not rospy.is_shutdown():
 
-    lidar.distance.show()
-    odom.show()
-    try:
-        rate.sleep()
-    except rospy.ROSInterruptException:
-        pass
+    rate.sleep()
+    counter += inc
+    if counter > 50:
+        inc = -1
+    elif counter < 0:
+        inc = 1
+    
+    if inc > 0:
+        motion.set_velocity(angular = 0.3)
+        odom.show()
+    elif inc < 0:
+        motion.set_velocity()
+        lidar.subsets.show()
+    
     motion.publish_velocity()
