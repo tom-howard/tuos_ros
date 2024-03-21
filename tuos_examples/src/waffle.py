@@ -95,7 +95,11 @@ class Pose():
         """
         if (rospy.get_time() - self.timestamp) > 1:
             self.timestamp = rospy.get_time()
-            print(f"posx = {self.posx:.3f} (m) posy = {self.posy:.3f} (m), yaw = {self.yaw:.1f} (degrees)")
+            print(
+                "Odometry Data:\n" \
+                f"posx = {self.posx:.3f} (m) posy = {self.posy:.3f} (m), yaw = {self.yaw:.1f} (degrees)\n" \
+                "---"
+            )
         
     def round(self, value, precision):
         value = int(value * (10**precision))
@@ -130,16 +134,20 @@ class Lidar():
             """
 
             if (rospy.get_time() - self.timestamp) > 1:
-                msg = f"              l1     front     r1          \n" \
+                msg = "LiDAR Subset Readings (meters):\n" \
+                    f"              l1     front     r1          \n" \
                     f"       l2     {self.l1:<5.3f}  {self.front:^5.3f}  {self.r1:>5.3f}     r2       \n" \
                     f"l3     {self.l2:<5.3f}                       {self.r2:>5.3f}   r3\n" \
                     f"{self.l3:<5.3f}                                   {self.r3:>5.3f}\n" \
-                    f"{self.l4:<5.3f} <-- l4                     r4 --> {self.r4:>5.3f}"
+                    f"{self.l4:<5.3f} <-- l4                     r4 --> {self.r4:>5.3f}\n" \
+                    "---"
                 self.timestamp = rospy.get_time()
                 print(msg)
                         
     def laserscan_cb(self, scan_data: LaserScan):
         
+        self.rangesArray = scan_data.ranges
+
         def filter(get_subset):
             valid_data = get_subset[(get_subset > 0.1) & (get_subset != float("inf"))]
             subset_array = valid_data.tolist()
