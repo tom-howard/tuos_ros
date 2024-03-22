@@ -15,6 +15,14 @@ from math import degrees
 import numpy as np
 
 class Motion():
+
+    """
+    Creates a `/cmd_vel` publisher and has callable methods to control velocity
+
+    Optional:
+        Set `debug=True/False` to enable/disable ROS log/warn messages (default = `True`) 
+    """
+
     def __init__(self, debug = True):
         self.dbg = debug
         self.publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
@@ -25,6 +33,11 @@ class Motion():
         self.low_rate_warn = 1.0 / 2.0 # seconds
 
     def set_velocity(self, linear = 0.0, angular = 0.0):
+        """
+        Creates a `Twist()` message with the specified velocities:
+        `linear = Twist().linear.x`, default = 0.0 [Units: m/s]
+        `angular = Twist().angular.z`, default = 0.0 [Units: rad/s] 
+        """
         if abs(linear) > 0.26:
             lin_org = linear
             linear = np.sign(linear) * 0.26
@@ -39,11 +52,22 @@ class Motion():
         self.vel_cmd.angular.z = angular
         
     def stop(self):
+        """
+        Creates a Twist() message with all velocities set to zero
+        and publishes this to /cmd_vel.
+        """
         self.dbg = False
         self.vel_cmd = Twist()
         self.publish_velocity()
 
     def publish_velocity(self):
+        """
+        Publishes a pre-configured Twist message to /cmd_vel.
+
+        The Twist message is configured by calling:
+
+            Motion().set_velocity(linear= , angular= )
+        """
         last_published = rospy.get_time() - self.timestamp 
         self.timestamp = rospy.get_time()
         self.publisher.publish(self.vel_cmd)
@@ -55,17 +79,27 @@ class Motion():
                                        "Check your loop rates!")
 
 class Pose():
+
+    """
+    Creates an `/odom` subscriber and handles the robot's `Odometry` data
+
+    Optional:
+        Set `debug=True/False` to enable/disable ROS log/warn messages (default = `True`)
+    """
+
     def odom_cb(self, odom_data: Odometry):
         orientation = odom_data.pose.pose.orientation
         position = odom_data.pose.pose.position
-        (_, _, yaw) = euler_from_quaternion([orientation.x,
-            orientation.y, orientation.z, orientation.w], 'sxyz')
+        (_, _, yaw) = euler_from_quaternion(
+            [orientation.x, orientation.y, orientation.z, orientation.w],
+            'sxyz'
+        )
         
-        yaw = self.round(degrees(yaw), 4)
+        yaw = self._round(degrees(yaw), 4)
         self.yaw_direction = np.sign(yaw)
         self.yaw = abs(yaw)
-        self.posx = self.round(position.x, 4)
-        self.posy = self.round(position.y, 4)
+        self.posx = self._round(position.x, 4)
+        self.posy = self._round(position.y, 4)
 
         self.wait_for_odom = False
     
@@ -83,7 +117,8 @@ class Pose():
     
     def show(self):
         """
-        A method to return the robot's current odometry 
+        A method to return the robot's current odometry.
+
         Messages will only be displayed once per second, regardless of 
         the rate at which the show() method is called.
         """
@@ -95,11 +130,18 @@ class Pose():
                 "---"
             )
         
-    def round(self, value, precision):
+    def _round(self, value, precision):
         value = int(value * (10**precision))
         return float(value) / (10**precision)
 
 class Lidar():
+
+    """
+    Creates a `/scan` subscriber and handles `LaserScan` data from the Waffle's LiDAR sensor
+
+    Optional:
+        Set `debug=True/False` to enable/disable ROS log/warn messages (default = `True`)
+    """
 
     def __init__(self, debug = True):
         self.dbg = debug
@@ -122,7 +164,8 @@ class Lidar():
         
         def show(self):
             """
-            A function to return distance readings from each LiDAR subset
+            A function to return distance readings from each LiDAR subset.
+
             Messages will only be displayed once per second, regardless of 
             the rate at which the show() method is called.
             """
