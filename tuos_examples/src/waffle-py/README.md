@@ -99,9 +99,7 @@ Optional:
 
 Distance (in meters) from 9 subsets of the `LaserScan.ranges` array:
 
-<figure markdown>
-  ![](https://tom-howard.github.io/ros/others/amr31001/lab2/lidar_segments.png?width=500px)
-</figure> 
+![](https://tom-howard.github.io/ros/others/amr31001/lab2/lidar_segments.png?width=500px)
 
 ##### Attributes
 
