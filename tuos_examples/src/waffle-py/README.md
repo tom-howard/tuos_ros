@@ -41,7 +41,7 @@ A `/cmd_vel` publisher.
 Optional:
 * Set `debug=True/False` to enable/disable ROS log/warn messages (default = `True`)
 
-### Methods
+#### Methods
 
 `Motion().set_velocity(linear = 0.0, angular = 0.0)`
 
