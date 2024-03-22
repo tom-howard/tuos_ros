@@ -16,7 +16,6 @@ import numpy as np
 
 class Motion():
     def __init__(self, debug = True):
-        self._dbg_init = debug
         self.dbg = debug
         self.publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
         self.publisher_rate = rospy.Rate(10) # Hz
@@ -26,7 +25,6 @@ class Motion():
         self.low_rate_warn = 1.0 / 2.0 # seconds
 
     def set_velocity(self, linear = 0.0, angular = 0.0):
-        self.dbg = self._dbg_init
         if abs(linear) > 0.26:
             lin_org = linear
             linear = np.sign(linear) * 0.26
