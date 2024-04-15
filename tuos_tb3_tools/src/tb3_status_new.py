@@ -28,7 +28,6 @@ class tb3Status():
         self.robot_status_string = "OK"
         self.startup_complete = False
         self.waffle_core_errors = False
-        self.first_update_complete = False
         self.active_nodes = []
         
         rospy.init_node(self.node_name, anonymous=True)
@@ -88,7 +87,9 @@ class tb3Status():
                 f"{'Voltage: ':>16}{self.battery_voltage:.2f}V [{self.capacity}%]"
             )
             self.timestamp = rospy.get_time()
-            self.first_update_complete = True
+        else:
+            print(".", end="")
+            sys.stdout.flush()
     
     def waffle_beeper(self, hush_if_ok = True):
         robot_status_ok = self.check_active_nodes() and not self.waffle_core_errors
@@ -120,11 +121,6 @@ class tb3Status():
             self.timestamp = rospy.get_time()
             while not self.ctrl_c:
                 self.print_status_msg()
-                    
-                if self.first_update_complete:
-                    print(".", end="")
-                    sys.stdout.flush()
-
                 self.rate.sleep()
         else:
             rospy.spin()
