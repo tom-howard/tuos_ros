@@ -84,7 +84,7 @@ class tb3Status():
                 f"{'Status: ':>16}{self.robot_status_string}\n"
                 f"{'Active Nodes: ':>16}{len(self.active_nodes)}\n"
                 f"{'Up Time: ':>16}{runtimestring} {units}\n"
-                f"{'Voltage: ':>16}{self.battery_voltage:.2f}V [{self.capacity}%]"
+                f"{'Battery: ':>16}{self.battery_voltage:.2f}V [{self.capacity}%]"
             )
             self.timestamp = rospy.get_time()
         else:
