@@ -8,6 +8,7 @@ from socket import gethostname
 import datetime as dt
 from turtlebot3_msgs.msg import Sound
 from sensor_msgs.msg import BatteryState
+from rosgraph_msgs.msg import Log
 
 hostname = gethostname()
 
@@ -24,7 +25,9 @@ class tb3Status():
     
     def __init__(self):
         self.node_name = "tb3_status"
-        self.startup = True
+        self.robot_status_string = "OK"
+        self.startup_complete = False
+        self.waffle_core_errors = False
         self.active_nodes = []
         
         rospy.init_node(self.node_name, anonymous=True)
@@ -32,15 +35,13 @@ class tb3Status():
 
         self.beeper = rospy.Publisher("/sound", Sound, queue_size = 10)
         self.battery = rospy.Subscriber("/battery_state", BatteryState, self.battery_callback)
-                
+        self.ros_errors = rospy.Subscriber("/rosout", Log, self.rosout_cb)
+
         self.ctrl_c = False
         rospy.on_shutdown(self.shutdownhook) 
 
-        timestamp = rospy.get_time()
         self.starttime = rospy.get_time()
-        while (rospy.get_time() - timestamp) < 10:
-            continue
-        self.startup = False
+        self.timestamp = rospy.get_time()
 
     def shutdownhook(self):
         self.ctrl_c = True
@@ -49,56 +50,80 @@ class tb3Status():
         self.battery_voltage = topic_data.voltage
         self.capacity = int(min((60 * self.battery_voltage) - 650, 100)) # Approx. percentage (capped at 100%)
     
+    def rosout_cb(self, rosout: Log):
+        node = rosout.name
+        msg = rosout.msg
+        level = rosout.level
+
+        if msg == "Calibration End" and node == "/turtlebot3_core":
+            self.startup_complete = True
+        
+        if level > 2 and node in core_nodes and msg != "":
+            self.waffle_core_errors = True
+
     def check_active_nodes(self):
         self.active_nodes = rosnode.get_node_names()
         return True if all([i in self.active_nodes for i in core_nodes]) else False
 
+    def print_status_msg(self):
+        now = rospy.get_time()
+        if (now - self.timestamp) > 5:
+            msg_timestamp = dt.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            runtime = now - self.starttime
+            if runtime > 60:
+                runtimestring = f"{runtime / 60:.1f}"
+                units="minutes"
+            else:
+                runtimestring = f"{runtime:.0f}"
+                units="seconds"
+            self.waffle_beeper(hush_if_ok=True)
+            os.system('clear')
+            print(f"{f'{msg_timestamp: ^21}':#^32}")
+            print(
+                f"{'Device: ':>16}{hostname}\n"
+                f"{'Status: ':>16}{self.robot_status_string}\n"
+                f"{'Active Nodes: ':>16}{len(self.active_nodes)}\n"
+                f"{'Up Time: ':>16}{runtimestring} {units}\n"
+                f"{'Voltage: ':>16}{self.battery_voltage:.2f}V [{self.capacity}%]"
+            )
+            self.timestamp = rospy.get_time()
+        else:
+            print(".", end="")
+            sys.stdout.flush()
+    
+    def waffle_beeper(self, hush_if_ok = True):
+        robot_status_ok = self.check_active_nodes() and not self.waffle_core_errors
+        self.robot_status_string = "OK" if robot_status_ok else "ERRORS"
+        if robot_status_ok and hush_if_ok:
+            pass
+        else:
+            msg = Sound()
+            msg.value = 1 if robot_status_ok else 3
+            self.beeper.publish(msg)
+        return robot_status_ok
+
     def main(self):
-        timestamp = rospy.get_time()
-        while self.startup:
+        while not self.startup_complete:
             continue
         
-        if self.check_active_nodes():
-            msg = Sound()
-            msg.value = 1
+        bringup_errors = False
+        if self.waffle_beeper(hush_if_ok=False):
             rospy.loginfo("--------------------------")
             rospy.loginfo(f"{hostname} is up and running!")
             rospy.loginfo("--------------------------")
-            self.beeper.publish(msg)
+        else:
+            rospy.logerr("--------------------------")
+            rospy.logerr(f"{hostname} failed to launch correctly, please try again.")
+            rospy.logerr("--------------------------")
+            bringup_errors = True
         
-        first_update = False
-        while not self.ctrl_c:
-            if (rospy.get_time() - timestamp) > 10:
-                first_update = True
-                
-                ts = dt.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                if self.check_active_nodes():
-                    rts = rospy.get_time() - self.starttime
-                    if rts > 60:
-                        runtimestring = f"{rts / 60:.1f}"
-                        minsecs="minutes"
-                    else:
-                        runtimestring = f"{rts:.0f}"
-                        minsecs="seconds"
-                    os.system('clear')
-                    print(f"{f'{ts: ^21}':#^32}")
-                    print(f"{'Device: ':>16}{hostname}\n"
-                          f"{'Status: ':>16}OK\n"
-                          f"{'Active Nodes: ':>16}{len(self.active_nodes)}\n"
-                          f"{'Up Time: ':>16}{runtimestring} {minsecs}\n"
-                          f"{'Voltage: ':>16}{self.battery_voltage:.2f}V [{self.capacity}%]"
-                    )
-                else:
-                    print(
-                        f"[{ts}] Waffle Status: ERROR\n"
-                        f"Core node(s) not running!"
-                        )
-                timestamp = rospy.get_time()
-            elif first_update:
-                print(".", end="")
-                sys.stdout.flush()
-
-            self.rate.sleep()
+        if not bringup_errors:
+            self.timestamp = rospy.get_time()
+            while not self.ctrl_c:
+                self.print_status_msg()
+                self.rate.sleep()
+        else:
+            rospy.spin()
 
 if __name__ == '__main__':
     node = tb3Status()
