@@ -41,7 +41,7 @@ class PoseSubscriber(Node):
         super().__init__('waffle_odom_parser')
         
         self.startup = True
-        self.up_and_running = True
+        self.up_and_running = False
 
         self.df = pd.DataFrame(index = ['linear_x','linear_y','linear_z',
                           'theta_x(Roll)','theta_y(Pitch)','theta_z(Yaw)'])
@@ -87,8 +87,7 @@ class PoseSubscriber(Node):
             time = self.get_clock().now().to_msg()
             os.system('clear')
             print(f"=========== ROS Time (s): {time.sec:>10.0f} ===========")
-            print(df)
-         
+            print(df)        
 
 def main(args=None):
     rclpy.init(args=args)
