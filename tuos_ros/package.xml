@@ -4,7 +4,7 @@
   <name>tuos_ros</name>
   <version>0.0.1</version>
   <description>
-    A meta-package containing ROS 2 (Foxy) packages for Tom's ROS course at the University of Sheffield
+    A meta-package containing ROS 2 (Humble) packages for Tom's ROS course at the University of Sheffield
   </description>
   
   <maintainer email="t.howard@sheffield.ac.uk">Tom Howard</maintainer>
@@ -14,7 +14,8 @@
   
   <buildtool_depend>ament_cmake</buildtool_depend>
   
-  <exec_depend>tuos_msgs</exec_depend>
+  <!-- <exec_depend>tuos_msgs</exec_depend> -->
+  <exec_depend>tuos_examples</exec_depend>
     
   <export>
     <build_type>ament_cmake</build_type>
