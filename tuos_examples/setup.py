@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'robot_pose = tuos_examples.robot_pose:main'
+            'robot_pose = tuos_examples.robot_pose:main',
+            'odom_subscriber = tuos_examples.odom_subscriber_template:main',
         ],
     },
 )
