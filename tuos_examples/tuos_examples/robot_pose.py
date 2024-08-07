@@ -15,10 +15,10 @@ def euler_from_quaternion(quaternions):
     taken from:
     https://automaticaddison.com/how-to-convert-a-quaternion-into-euler-angles-in-python/
     """
-    x = quaternions[0]
-    y = quaternions[1]
-    z = quaternions[2]
-    w = quaternions[3]
+    x = quaternions.x
+    y = quaternions.y
+    z = quaternions.z
+    w = quaternions.w
     
     t0 = +2.0 * (w * x + y * z)
     t1 = +1.0 - 2.0 * (x * x + y * y)
@@ -62,12 +62,7 @@ class PoseSubscriber(Node):
         pos_x = msg.pose.pose.position.x
         pos_y = msg.pose.pose.position.y
         pos_z = msg.pose.pose.position.z
-        orientation_quaternions = [
-            msg.pose.pose.orientation.x,
-            msg.pose.pose.orientation.y,
-            msg.pose.pose.orientation.z,
-            msg.pose.pose.orientation.w,
-        ]
+        orientation_quaternions = msg.pose.pose.orientation
 
         (roll, pitch, yaw) = euler_from_quaternion(orientation_quaternions)
 
