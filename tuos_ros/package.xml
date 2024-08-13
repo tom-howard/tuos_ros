@@ -6,18 +6,18 @@
   <description>
     A meta-package containing ROS 2 (Humble) packages for Tom's ROS course at the University of Sheffield
   </description>
-  
   <maintainer email="t.howard@sheffield.ac.uk">Tom Howard</maintainer>
   <license>TODO</license>
-  <url type="website">https://tom-howard.github.io/ros2/</url>
+  
+  <url type="website">https://tom-howard.github.io/com2009/</url>
   <url type="repository">https://github.com/tom-howard/tuos_ros</url>
   
   <buildtool_depend>ament_cmake</buildtool_depend>
   
-  <!-- <exec_depend>tuos_msgs</exec_depend> -->
   <exec_depend>tuos_examples</exec_depend>
     
   <export>
     <build_type>ament_cmake</build_type>
   </export>
+
 </package>
