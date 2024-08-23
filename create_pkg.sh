@@ -30,7 +30,6 @@ if [ -z "$PKG_NAME" ]; then
     echo "[EXITING] No package name provided."
     exit 0
 fi
-echo "$PKG_NAME"
 
 if [ -z "$COLCON_PREFIX_PATH" ]; then
     echo "[EXITING] No ROS2 Workspaces detected."
@@ -38,7 +37,6 @@ if [ -z "$COLCON_PREFIX_PATH" ]; then
 fi
 
 IFS=':' read -r -a COLCON_WS <<< "$COLCON_PREFIX_PATH"
-echo "${#COLCON_WS[@]}"
 
 NUM_WORKSPACES=${#COLCON_WS[@]}
 VALID_INPUTS=""
@@ -76,7 +74,6 @@ fi
 # fi
 
 PKG_PATH="$ROS2_WS/$PKG_NAME"
-echo "$PKG_PATH"
 
 if [ -d "$PKG_PATH" ]; then
     echo "[WARNING] The '$PKG_NAME' ROS package (or a directory of the same name) already exists!"
