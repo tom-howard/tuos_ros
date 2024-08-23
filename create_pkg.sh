@@ -7,6 +7,7 @@
 
 ask() {
     local reply
+
     echo -e -n "[INPUT] $1 [y/n] >> "
     read -r reply </dev/tty
     if [[ -z $reply ]]; then
