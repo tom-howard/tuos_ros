@@ -18,37 +18,64 @@ ask() {
     fi
 }
 
-if [ -z "$COLCON_PREFIX_PATH" ]; then
-    echo "[EXITING] No ROS2 Workspaces detected."
-    exit 0
+if [[ $# -eq 0 ]]; then
+    echo -n "[INPUT] Please enter a name for your package >> "
+    read -r PKG_NAME </dev/tty
+else
+    PKG_NAME=$1
 fi
-
-ROS2_WS=""
-for path in ${COLCON_PREFIX_PATH//:/ }; do
-    targetdir="$(dirname "$path")/src"
-    echo "ROS2 Workspace detected at: '$targetdir'."
-    if ask "Do you want to create your package here?"; then
-        ROS2_WS=$targetdir
-        break
-    else
-        continue
-    fi
-done
-
-if [ -z "$ROS2_WS" ]; then
-    echo "[EXITING] No path selected."
-    exit 0    
-fi
-
-echo -n "[INPUT] Please enter a name for your package >> "
-read -r PKG_NAME </dev/tty
 
 if [ -z "$PKG_NAME" ]; then
     echo "[EXITING] No package name provided."
     exit 0
 fi
+echo "$PKG_NAME"
+
+if [ -z "$COLCON_PREFIX_PATH" ]; then
+    echo "[EXITING] No ROS2 Workspaces detected."
+    exit 0
+fi
+
+IFS=':' read -r -a COLCON_WS <<< "$COLCON_PREFIX_PATH"
+echo "${#COLCON_WS[@]}"
+
+NUM_WORKSPACES=${#COLCON_WS[@]}
+VALID_INPUTS=""
+ROS2_WS=""
+if [[ $NUM_WORKSPACES -gt 1 ]]; then
+    echo "Multiple ROS2 Workspaces detected..."
+    for index in "${!COLCON_WS[@]}";
+    do
+        echo "  [$(($index+1))] ${COLCON_WS[index]}"
+        if [[ $index -eq 0 ]]; then
+            VALID_INPUTS="$(($index+1))"
+        else
+            VALID_INPUTS="$VALID_INPUTS, $(($index+1))"
+        fi
+    done
+    echo -n "[INPUT] Which one do you want to use [$VALID_INPUTS]? >> "
+    read -r WORKSPACE_IDX </dev/tty
+
+    if [ -z "$WORKSPACE_IDX" ]; then
+        echo "[EXITING] No option selected."
+        exit 0
+    elif (( $WORKSPACE_IDX > 0 && $WORKSPACE_IDX <= $NUM_WORKSPACES )); then
+        ROS2_WS="$(dirname "${COLCON_WS[$(($WORKSPACE_IDX-1))]}")/src"
+    else
+        echo "[EXITING] Invalid option: '$WORKSPACE_IDX'."
+        exit 0
+    fi
+else
+    ROS2_WS="$(dirname "$COLCON_WS")/src"
+fi
+
+# if [ -z "$ROS2_WS" ]; then
+#     echo "[EXITING] No path selected."
+#     exit 0    
+# fi
 
 PKG_PATH="$ROS2_WS/$PKG_NAME"
+echo "$PKG_PATH"
 
 if [ -d "$PKG_PATH" ]; then
     echo "[WARNING] The '$PKG_NAME' ROS package (or a directory of the same name) already exists!"
