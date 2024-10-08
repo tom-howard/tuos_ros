@@ -22,17 +22,14 @@ def generate_launch_description():
     output = LaunchConfiguration(
         'output', default='log',
     )
-    color_width = LaunchConfiguration(
-        'color_width', default='848',
+    color_profile = LaunchConfiguration(
+        'rgb_camera.color_profile', default='848x480x15'
     )
-    color_height = LaunchConfiguration(
-        'color_height', default='480',
-    )
-    color_fps = LaunchConfiguration(
-        'color_fps', default='15'
+    depth_profile = LaunchConfiguration(
+        'depth_module.depth_profile', default='848x480x15'
     )
     align_depth = LaunchConfiguration(
-        'align_depth', default='true'
+        'align_depth.enable', default='true'
     )
 
     return LaunchDescription([
@@ -42,19 +39,15 @@ def generate_launch_description():
             default_value=output,
         ),
         DeclareLaunchArgument(
-            'color_width',
-            default_value=color_width,
+            'rgb_camera.color_profile',
+            default_value=color_profile,
         ),
         DeclareLaunchArgument(
-            'color_height',
-            default_value=color_height,
+            'depth_module.depth_profile',
+            default_value=depth_profile,
         ),
         DeclareLaunchArgument(
-            'color_fps',
-            default_value=color_fps,
-        ),
-        DeclareLaunchArgument(
-            'align_depth',
+            'align_depth.enable',
             default_value=align_depth,
         ),
 
@@ -70,10 +63,9 @@ def generate_launch_description():
             ),
             launch_arguments={
                 'output': output,
-                'color_width': color_width,
-                'color_height': color_height,
-                'color_fps': color_fps,
-                'align_depth': align_depth,
+                'rgb_camera.color_profile': color_profile,
+                'depth_module.depth_profile': depth_profile,
+                'align_depth.enable': align_depth,
             }.items(),
         )
     ])
