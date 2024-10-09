@@ -28,8 +28,11 @@ def generate_launch_description():
     depth_profile = LaunchConfiguration(
         'depth_module.depth_profile', default='848x480x15'
     )
-    align_depth = LaunchConfiguration(
-        'align_depth.enable', default='true'
+    enable_depth = LaunchConfiguration(
+        'enable_depth', default='false'
+    )
+    camera_namespace = LaunchConfiguration(
+        'camera_namespace', default=""
     )
 
     return LaunchDescription([
@@ -37,6 +40,10 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'output',
             default_value=output,
+        ),
+        DeclareLaunchArgument(
+            'camera_namespace',
+            default_value=camera_namespace,
         ),
         DeclareLaunchArgument(
             'rgb_camera.color_profile',
@@ -47,8 +54,8 @@ def generate_launch_description():
             default_value=depth_profile,
         ),
         DeclareLaunchArgument(
-            'align_depth.enable',
-            default_value=align_depth,
+            'enable_depth',
+            default_value=enable_depth,
         ),
 
         IncludeLaunchDescription(
@@ -63,9 +70,10 @@ def generate_launch_description():
             ),
             launch_arguments={
                 'output': output,
+                'camera_namespace': camera_namespace,
                 'rgb_camera.color_profile': color_profile,
                 'depth_module.depth_profile': depth_profile,
-                'align_depth.enable': align_depth,
+                'enable_depth': enable_depth,
             }.items(),
         )
     ])
