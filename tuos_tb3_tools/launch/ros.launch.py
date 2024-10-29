@@ -34,6 +34,9 @@ def generate_launch_description():
     camera_namespace = LaunchConfiguration(
         'camera_namespace', default=""
     )
+    color_qos = LaunchConfiguration(
+        'color_qos', default="SENSOR_DATA"
+    )
 
     return LaunchDescription([
         
@@ -57,6 +60,10 @@ def generate_launch_description():
             'enable_depth',
             default_value=enable_depth,
         ),
+        DeclareLaunchArgument(
+            'color_qos',
+            default_value=color_qos,
+        ),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -74,6 +81,7 @@ def generate_launch_description():
                 'rgb_camera.color_profile': color_profile,
                 'depth_module.depth_profile': depth_profile,
                 'enable_depth': enable_depth,
+                'color_qos': color_qos,
             }.items(),
         )
     ])
