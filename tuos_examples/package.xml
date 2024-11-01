@@ -3,19 +3,22 @@
 <package format="3">
   <name>tuos_examples</name>
   <version>0.0.0</version>
-  <description>Examples for the COM2009 ROS2 Course</description>
-  <maintainer email="t.howard@sheffild.ac.uk">Tom Howard</maintainer>
-  <license>MIT</license>
+  <description>Examples for the ROS2 Course at the University of Sheffield</description>
+  <maintainer email="t.howard@sheffield.ac.uk">Tom Howard</maintainer>
+  <license>TODO: License declaration</license>
 
   <exec_depend>rclpy</exec_depend>
   <exec_depend>nav_msgs</exec_depend>
 
-  <test_depend>ament_copyright</test_depend>
-  <test_depend>ament_flake8</test_depend>
-  <test_depend>ament_pep257</test_depend>
-  <test_depend>python3-pytest</test_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <depend>rclcpp</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
 
   <export>
-    <build_type>ament_python</build_type>
+    <build_type>ament_cmake</build_type>
   </export>
 </package>
