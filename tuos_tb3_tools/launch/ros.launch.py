@@ -37,11 +37,11 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             'color_profile',
-            default_value='848x480x15',
+            default_value='640x480x15',
         ),
         DeclareLaunchArgument(
             'depth_profile',
-            default_value='848x480x15',
+            default_value='640x480x15',
         ),
         DeclareLaunchArgument(
             'enable_depth',
