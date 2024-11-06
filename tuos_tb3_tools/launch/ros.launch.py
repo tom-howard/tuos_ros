@@ -5,7 +5,6 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 
-
 def generate_launch_description():
     # Get package paths
     turtlebot3_bringup_pkg = get_package_share_directory('turtlebot3_bringup')
@@ -19,50 +18,38 @@ def generate_launch_description():
     # )
     
     # Launch arguments for realsense2_camera
-    output = LaunchConfiguration(
-        'output', default='log',
-    )
-    color_profile = LaunchConfiguration(
-        'rgb_camera.color_profile', default='848x480x15'
-    )
-    depth_profile = LaunchConfiguration(
-        'depth_module.depth_profile', default='848x480x15'
-    )
-    enable_depth = LaunchConfiguration(
-        'enable_depth', default='false'
-    )
-    camera_namespace = LaunchConfiguration(
-        'camera_namespace', default=""
-    )
-    color_qos = LaunchConfiguration(
-        'color_qos', default="SENSOR_DATA"
-    )
+    output = LaunchConfiguration('output')
+    color_profile = LaunchConfiguration('color_profile')
+    depth_profile = LaunchConfiguration('depth_profile')
+    enable_depth = LaunchConfiguration('enable_depth')
+    camera_namespace = LaunchConfiguration('camera_namespace')
+    color_qos = LaunchConfiguration('color_qos')
 
     return LaunchDescription([
         
         DeclareLaunchArgument(
             'output',
-            default_value=output,
+            default_value='log',
         ),
         DeclareLaunchArgument(
             'camera_namespace',
-            default_value=camera_namespace,
+            default_value='',
         ),
         DeclareLaunchArgument(
-            'rgb_camera.color_profile',
-            default_value=color_profile,
+            'color_profile',
+            default_value='848x480x15',
         ),
         DeclareLaunchArgument(
-            'depth_module.depth_profile',
-            default_value=depth_profile,
+            'depth_profile',
+            default_value='848x480x15',
         ),
         DeclareLaunchArgument(
             'enable_depth',
-            default_value=enable_depth,
+            default_value='false',
         ),
         DeclareLaunchArgument(
             'color_qos',
-            default_value=color_qos,
+            default_value='SENSOR_DATA',
         ),
 
         IncludeLaunchDescription(
