@@ -10,12 +10,12 @@ def generate_launch_description():
     turtlebot3_bringup_pkg = get_package_share_directory('turtlebot3_bringup')
     realsense2_camera_pkg = get_package_share_directory('realsense2_camera')
 
-    # tb3_status_node = Node(
-    #     package=tuos_tb3_tools_pkg,
-    #     executable='tb3_status.py',  # Assuming tb3_status.py is executable
-    #     name='tb3_status_node',
-    #     output='screen',
-    # )
+    tb3_status_node = Node(
+        package='tuos_tb3_tools',
+        executable='tb3_status.py',  # Assuming tb3_status.py is executable
+        name='tb3_status_node',
+        output='screen',
+    )
     
     # Launch arguments for realsense2_camera
     output = LaunchConfiguration('output')
@@ -70,5 +70,7 @@ def generate_launch_description():
                 'enable_depth': enable_depth,
                 'color_qos': color_qos,
             }.items(),
-        )
+        ),
+
+        tb3_status_node
     ])
