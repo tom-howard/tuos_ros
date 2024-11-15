@@ -34,6 +34,7 @@ class Tb3Status(Node):
         self.active_nodes = []
         self.shutdown = False
         self.robot_status = ""
+        self.previous_battery_capacity = 0
 
         self.rosout_sub = self.create_subscription(
             Log, '/rosout', self.rosout_cb, qos_profile=10)
@@ -41,13 +42,13 @@ class Tb3Status(Node):
         timer_rate = 1 # Hz
         self.create_timer(timer_period_sec=1/timer_rate, callback=self.timer_cb)
         self.timer_counter = 0
-        self.status_msg_trigger = 5 * timer_rate # every 5 seconds
+        msg_period = 5 # seconds
+        self.status_msg_trigger = msg_period * timer_rate 
 
         self.beep_srv = self.create_client(srv_type=Sound, srv_name="sound")
         self.get_logger().info("Waiting for the /sound service...")
         while not self.beep_srv.wait_for_service(timeout_sec=1.0):
-            print(".", end="")
-            sys.stdout.flush()
+            continue
         self.bringup_checks[2] = True
         self.get_logger().info("/sound service is ready.")
 
@@ -61,6 +62,7 @@ class Tb3Status(Node):
     def timer_cb(self):
         self.check_active_nodes()
         now = self.get_clock().now()
+        self.get_logger().info(now)
         if self.timer_counter > self.status_msg_trigger: 
             msg_timestamp = dt.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             # runtime = (now - self.starttime).seconds_nanoseconds
@@ -95,6 +97,13 @@ class Tb3Status(Node):
     def battery_callback(self, msg: BatteryState):
         self.battery_voltage = msg.voltage
         self.capacity = int(min((60 * self.battery_voltage) - 650, 100))  # Approx. percentage (capped at 100%)
+        if self.capacity <= 15:
+            if self.capacity != self.previous_battery_capacity:
+                self.waffle_beeper(value=2) 
+                self.get_logger().warn(
+                    f"Battery Low. Replace BEFORE capacity reaches 10%."
+                )
+        self.previous_battery_capacity = self.capacity
 
     def rosout_cb(self, topic_data: Log):
         node = topic_data.name
@@ -104,34 +113,33 @@ class Tb3Status(Node):
         if not self.bringup_complete:
             if msg == "Run!" and node == "diff_drive_controller":
                 self.bringup_checks[0] = True
-
             if msg == "Run!" and node == "turtlebot3_node":
                 self.bringup_checks[1] = True
-            
             self.bringup_complete = all(self.bringup_checks)
             if self.bringup_complete: 
                 if not self.waffle_core_errors:
                     self.get_logger().info(
                         "\n\n"
-                        "################################\n"
-                        f"{hostname} is up and running!\n"
-                        "################################\n"
+                        f"{'':#^40}\n"
+                        f"{f' {hostname} is up and running! ':#^40}\n"
+                        f"{'':#^40}\n"
                     )
                     self.bringup_errors = False
                     self.waffle_beeper(value=1)
                 else:
                     self.get_logger().error(
                         "\n\n"
-                        "################################\n"
-                        "Bringup error, please try again.\n"
-                        "################################\n"
+                        f"{'':#^40}\n"
+                        f"{f' Bringup error, please try again. ':#^40}\n"
+                        f"{'':#^40}\n"
                     )
                     self.bringup_errors = True
 
         if level > 30 and node in core_nodes and msg != "":
-            # Any logs greter than WARN from any of the core nodes only:
+            # Any logs greater than WARN from core nodes only:
             self.waffle_core_errors = True
             self.robot_status = "ERROR"
+            # BEEP [value=3] (at rate X...?)
         else:
             self.robot_status = "OK"
 
