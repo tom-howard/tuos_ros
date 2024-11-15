@@ -61,8 +61,8 @@ class Tb3Status(Node):
 
     def timer_cb(self):
         self.check_active_nodes()
-        now = self.get_clock().now()
-        self.get_logger().info(now)
+        # now = self.get_clock().now()
+        # self.get_logger().info(now)
         if self.timer_counter > self.status_msg_trigger: 
             msg_timestamp = dt.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             # runtime = (now - self.starttime).seconds_nanoseconds
@@ -98,11 +98,12 @@ class Tb3Status(Node):
         self.battery_voltage = msg.voltage
         self.capacity = int(min((60 * self.battery_voltage) - 650, 100))  # Approx. percentage (capped at 100%)
         if self.capacity <= 15:
-            if self.capacity != self.previous_battery_capacity:
+            if self.capacity < self.previous_battery_capacity:
                 self.waffle_beeper(value=2) 
                 self.get_logger().warn(
-                    f"Battery Low. Replace BEFORE capacity reaches 10%."
-                )
+                    f"Battery Low. Replace BEFORE capacity reaches 10%.",
+                    throttle_duration_sec=10 
+                ) # perhaps do this at a lower rate (i.e not in this function...)
         self.previous_battery_capacity = self.capacity
 
     def rosout_cb(self, topic_data: Log):
