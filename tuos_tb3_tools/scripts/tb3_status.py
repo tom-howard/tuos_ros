@@ -34,7 +34,6 @@ class Tb3Status(Node):
         self.active_nodes = []
         self.shutdown = False
         self.robot_status = ""
-        self.previous_battery_capacity = 0
 
         self.rosout_sub = self.create_subscription(
             Log, '/rosout', self.rosout_cb, qos_profile=10)
@@ -54,7 +53,8 @@ class Tb3Status(Node):
 
         self.battery_sub = self.create_subscription(
             BatteryState, '/battery_state', self.battery_callback, qos_profile=10)
-        
+        self.batt_warn_levels = [15, 14, 13, 12, 11, 10]
+        self.batt_warns = self.batt_warn_levels
 
         self.starttime = self.get_clock().now()
         self.timestamp = self.get_clock().now()
@@ -97,14 +97,18 @@ class Tb3Status(Node):
     def battery_callback(self, msg: BatteryState):
         self.battery_voltage = msg.voltage
         self.capacity = int(min((60 * self.battery_voltage) - 650, 100))  # Approx. percentage (capped at 100%)
-        if self.capacity <= 15:
-            if self.capacity < self.previous_battery_capacity:
+        if self.capacity < max(self.batt_warn_levels) + 2:
+            self.get_logger().warn("battery less than 20%", throttle_duration_sec=2)
+            if self.capacity in self.batt_warns:
+                self.get_logger().warn(f"battery warning ({self.capacity}%) triggered")
+                self.batt_warns[self.batt_warns.index(self.capacity)] = -1
+                self.get_logger().info(f"{self.batt_warns=}")
                 self.waffle_beeper(value=2) 
                 self.get_logger().warn(
-                    f"Battery Low. Replace BEFORE capacity reaches 10%.",
-                    throttle_duration_sec=10 
-                ) # perhaps do this at a lower rate (i.e not in this function...)
-        self.previous_battery_capacity = self.capacity
+                    f"Battery Low. Replace BEFORE capacity reaches 10%."
+                ) 
+        else:
+            self.batt_warns = self.batt_warn_levels
 
     def rosout_cb(self, topic_data: Log):
         node = topic_data.name
