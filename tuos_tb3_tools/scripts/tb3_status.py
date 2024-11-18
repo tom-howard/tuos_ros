@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import os
-import sys
 import datetime as dt
 from socket import gethostname
 from turtlebot3_msgs.srv import Sound
@@ -55,37 +53,35 @@ class Tb3Status(Node):
             BatteryState, '/battery_state', self.battery_callback, qos_profile=10)
         self.batt_warn_levels = [15, 14, 13, 12, 11, 10]
         self.batt_warns = self.batt_warn_levels
+        self.capacity = 100
 
-        self.starttime = self.get_clock().now()
-        self.timestamp = self.get_clock().now()
-
+        [self.starttime, _] = self.get_clock().now().seconds_nanoseconds()
+        [self.err_timestamp, _] = self.get_clock().now().seconds_nanoseconds()
+        
     def timer_cb(self):
         self.check_active_nodes()
-        # now = self.get_clock().now()
-        # self.get_logger().info(now)
+        [now, _] = self.get_clock().now().seconds_nanoseconds()
         if self.timer_counter > self.status_msg_trigger: 
+            self.check_battery_status()
             msg_timestamp = dt.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            # runtime = (now - self.starttime).seconds_nanoseconds
-            # if runtime > 60:
-            #     runtimestring = f"{runtime / 60:.1f}"
-            #     units = "minutes"
-            # else:
-            #     runtimestring = f"{runtime:.0f}"
-            #     units = "seconds"
-            # # self.waffle_beeper(hush_if_ok=True)
+            runtime = now - self.starttime
+            if runtime > 60:
+                runtimestring = f"{runtime / 60:.1f}"
+                units = "minutes"
+            else:
+                runtimestring = f"{runtime:.0f}"
+                units = "seconds"
             self.get_logger().info(
                 f"\n\n{f'{msg_timestamp: ^21}':#^32}\n"
                 f"{'Device: ':>16}{hostname}\n"
                 f"{'Status: ':>16}{self.robot_status}\n"
                 f"{'Active Nodes: ':>16}{len(self.active_nodes)}\n"
-                # f"{'Up Time: ':>16}{runtimestring} {units}\n"
-                f"{'Battery: ':>16}{self.battery_voltage:.2f}V [{self.capacity}%]\n"
+                f"{'Up Time: ':>16}{runtimestring} {units}\n"
+                f"{'Battery: ':>16}{self.battery_voltage:.2f}V [{self.capacity}%]"
+                f"{'*'*sum([1 for x in self.batt_warns if x == -1])}\n"
             )
-            # self.timestamp = self.get_clock().now()
             self.timer_counter = 0
         else:
-            print(".", end="")
-            sys.stdout.flush()
             self.timer_counter += 1
 
     def on_shutdown(self):
@@ -97,15 +93,19 @@ class Tb3Status(Node):
     def battery_callback(self, msg: BatteryState):
         self.battery_voltage = msg.voltage
         self.capacity = int(min((60 * self.battery_voltage) - 650, 100))  # Approx. percentage (capped at 100%)
-        if self.capacity < max(self.batt_warn_levels) + 2:
-            self.get_logger().warn("battery less than 20%", throttle_duration_sec=2)
+        if self.capacity < max(self.batt_warn_levels) + 5:
+            self.get_logger().warn(
+                f"Battery level is getting low!",
+                throttle_duration_sec=30
+            )
+
+    def check_battery_status(self):
+        if self.capacity < max(self.batt_warn_levels) + 5:
             if self.capacity in self.batt_warns:
-                self.get_logger().warn(f"battery warning ({self.capacity}%) triggered")
                 self.batt_warns[self.batt_warns.index(self.capacity)] = -1
-                self.get_logger().info(f"{self.batt_warns=}")
                 self.waffle_beeper(value=2) 
                 self.get_logger().warn(
-                    f"Battery Low. Replace BEFORE capacity reaches 10%."
+                    f"Battery capacity dropped to {self.capacity}%! Replace BEFORE capacity reaches 10%."
                 ) 
         else:
             self.batt_warns = self.batt_warn_levels
@@ -144,7 +144,12 @@ class Tb3Status(Node):
             # Any logs greater than WARN from core nodes only:
             self.waffle_core_errors = True
             self.robot_status = "ERROR"
-            # BEEP [value=3] (at rate X...?)
+            [timer, _] = self.get_clock().now().seconds_nanoseconds()
+            if timer - self.err_timestamp > 10:
+                self.waffle_beeper(value=3)
+                [self.err_timestamp, _] = self.get_clock().now().seconds_nanoseconds()
+        elif self.capacity <= 10:
+            self.robot_status = "ERROR"
         else:
             self.robot_status = "OK"
 
