@@ -1,25 +1,26 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>tuos_ros</name>
+  <name>tuos_simulations</name>
   <version>0.0.1</version>
   <description>
-    A meta-package containing ROS 2 (Humble) packages for Tom's ROS course at the University of Sheffield
+    Simulation package for the TUoS ROS 2 Course
   </description>
   <maintainer email="t.howard@sheffield.ac.uk">Tom Howard</maintainer>
   <license>TODO</license>
   
-  <url type="website">https://tom-howard.github.io/com2009/</url>
-  <url type="repository">https://github.com/tom-howard/tuos_ros</url>
-  
   <buildtool_depend>ament_cmake</buildtool_depend>
   
-  <exec_depend>tuos_examples</exec_depend>
-  <exec_depend>tuos_simulations</exec_depend>
-  <exec_depend>tuos_tb3_tools</exec_depend>
-    
+  <depend>gazebo_ros_pkgs</depend>
+  <!-- <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tf2</depend> -->
+  
   <export>
     <build_type>ament_cmake</build_type>
+    <gazebo_ros gazebo_model_path="${prefix}/models"/>
   </export>
 
 </package>
