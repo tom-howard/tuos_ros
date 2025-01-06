@@ -1,0 +1,10 @@
+#goal
+float32 yaw_angle      # the angular distance by which to turn (degrees)
+int32 msg_count        # the number of status messages to issue over the course of the action
+---
+#result
+string summary         # a summary of the action 
+---
+#feedback
+int32 current_msg      # the current feedback message
+float32 current_angle  # the current angular position of the robot (degrees)

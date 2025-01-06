@@ -29,14 +29,14 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-## Install Python modules NOT NEEDED??
-# ament_python_install_package(${PROJECT_NAME})
+# Install Python modules NOT NEEDED??
+ament_python_install_package(${PROJECT_NAME})
 
 # Install Python executables
 install(PROGRAMS
   scripts/odom_subscriber_template.py
   scripts/robot_pose.py
-  scripts/camera_sweep_action_server.py
+  scripts/waffle_yaw_action_server.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

@@ -39,6 +39,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Num.msg"
   "msg/Sphere.msg"
   "action/CameraSweep.action"
+  "action/Yaw.action"
   DEPENDENCIES geometry_msgs # Add packages that above messages depend on, in this case geometry_msgs for Sphere.msg
 )
 
