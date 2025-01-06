@@ -36,6 +36,7 @@ install(TARGETS
 install(PROGRAMS
   scripts/odom_subscriber_template.py
   scripts/robot_pose.py
+  scripts/camera_sweep_action_server.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
