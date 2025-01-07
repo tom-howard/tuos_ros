@@ -145,9 +145,9 @@ class CameraSweepActionServer(Node):
             f"myrosdata/action_examples/{start_time}/")
         result.image_path = str(self.base_image_path).replace(str(Path.home()), "~")
                 
-        i = 0
+        img_num = 0
         start_time_ns = self.get_clock().now().nanoseconds
-        while i < goal.request.image_count:
+        while img_num < goal.request.image_count:
             self.vel_pub.publish(vel_cmd)
             # check if there has been a request to cancel the action:
             if goal.is_cancel_requested:
@@ -155,7 +155,7 @@ class CameraSweepActionServer(Node):
                     "Cancelling the camera sweep."
                 )
 
-                result.image_path = f"{result.image_path} [CANCELLED at image {i} (of {goal.request.image_count})]"                
+                result.image_path = f"{result.image_path} [CANCELLED at image {img_num} (of {goal.request.image_count})]"                
                 goal.canceled()
                 # stop the robot:
                 self.vel_pub.publish(Twist())
@@ -165,11 +165,11 @@ class CameraSweepActionServer(Node):
             yaw_total = yaw_total + abs(self.yaw - ref_yaw)
             ref_yaw = self.yaw
             if yaw_inc >= ang_incs:
-                i += 1 # increment the image counter
+                img_num += 1 # increment the image counter
                 timestamp_ns = self.get_clock().now().nanoseconds
 
                 # populate a feedback message and publish it:
-                feedback.current_image = i
+                feedback.current_image = img_num
                 feedback.current_angle = yaw_total
                 goal.publish_feedback(feedback)
 
@@ -179,7 +179,7 @@ class CameraSweepActionServer(Node):
                 # save the most recently captured image:
                 self.base_image_path.mkdir(parents=True, exist_ok=True)
                 cv2.imwrite(
-                    str(self.base_image_path.joinpath(f"img{i:03.0f}.jpg")),
+                    str(self.base_image_path.joinpath(f"img{img_num:03.0f}.jpg")),
                     self.current_camera_image
                 )
                 
@@ -190,7 +190,7 @@ class CameraSweepActionServer(Node):
         self.get_logger().info(
             f"{self.get_name()} completed successfully:\n"
             f"  - Angular sweep = {yaw_total:.2f} degrees\n"
-            f"  - Images captured = {i}\n"
+            f"  - Images captured = {img_num}\n"
             f"  - Time taken = {elapsed_time_seconds:.2f} seconds"
         )
         goal.succeed()
