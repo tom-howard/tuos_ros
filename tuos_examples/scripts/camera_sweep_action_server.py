@@ -13,20 +13,17 @@ from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.signals import SignalHandlerOptions
 
-# # Import some image processing modules:
-# import cv2
-# from cv_bridge import CvBridge
+# Import some image processing modules:
+import cv2
+from cv_bridge import CvBridge
 
 # Import all the necessary ROS message types:
 from tuos_interfaces.action import CameraSweep
-# from sensor_msgs.msg import CompressedImage
+from sensor_msgs.msg import CompressedImage
 
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from tuos_examples.tb3_tools import quaternion_to_euler
-
-# # Import some helper functions from the tb3.py module within this package
-# from tb3 import Tb3Move, Tb3Odometry
 
 # Import some other useful Python Modules
 from math import radians, degrees
@@ -45,12 +42,18 @@ class CameraSweepActionServer(Node):
         )
         self.vel_pub.publish(Twist())
 
-        self.subscription = self.create_subscription(
+        self.odom_sub = self.create_subscription(
             Odometry,
             'odom',
             self.odom_callback,
             10)
         
+        self.camera_sub = self.create_subscription(
+            msg_type=CompressedImage,
+            topic="/camera/image_raw/compressed",
+            callback=self.camera_callback,
+            qos_profile=10)
+
         self.actionserver = ActionServer(
             node=self, 
             action_type=CameraSweep,
@@ -63,16 +66,17 @@ class CameraSweepActionServer(Node):
 
         self.shutdown = False
 
-        # self.camera_subscriber = rospy.Subscriber("/camera/rgb/image_raw/compressed",
-        #     CompressedImage, self.camera_callback)
-        # self.cv_image = CvBridge()
-
-        # self.robot_controller = Tb3Move()
-        # self.robot_odom = Tb3Odometry()
-    
-    # def camera_callback(self, img):
-    #     image_to_capture = self.cv_image.compressed_imgmsg_to_cv2(img, desired_encoding="passthrough")
-    #     self.current_camera_image = image_to_capture
+    def odom_callback(self, odom_msg):
+        _, _, yaw = quaternion_to_euler(
+            odom_msg.pose.pose.orientation
+        )
+        self.yaw = abs(degrees(yaw))
+        
+    def camera_callback(self, img_msg):
+        cv_image = CvBridge()
+        img = cv_image.compressed_imgmsg_to_cv2(
+            img_msg, desired_encoding="passthrough")
+        self.current_camera_image = img
     
     def goal_callback(self, request):
         goal_ok = True
@@ -84,19 +88,18 @@ class CameraSweepActionServer(Node):
         
         if request.image_count <= 0:
             self.get_logger().warn(
-                "Too few images (image_count must be greater than 0)."
+                "Not enough images (image_count must be greater than 0)."
             )
             goal_ok = False
-        elif request.image_count > 50:
+        elif request.image_count > 30:
             self.get_logger().warn(
-                "Too many images (I'll accept a maximum of 50)."
+                "Too many images (I'll do a maximum of 30)."
             )
             goal_ok = False
-
         return GoalResponse.ACCEPT if goal_ok else GoalResponse.REJECT
     
     def cancel_callback(self, goal):
-        self.get_logger().info('Received cancel request')
+        self.get_logger().info('Received a cancel request...')
         return CancelResponse.ACCEPT
 
     def on_shutdown(self):
@@ -104,101 +107,93 @@ class CameraSweepActionServer(Node):
             self.vel_pub.publish(Twist())
         self.shutdown = True
 
-    def odom_callback(self, odom_msg):
-        # pos_x = odom_msg.pose.pose.position.x
-        # pos_y = odom_msg.pose.pose.position.y
-
-        _, _, yaw = quaternion_to_euler(
-            odom_msg.pose.pose.orientation
-        )
-        self.yaw = degrees(yaw)
-        self.get_logger().info(f"odom callback says: {self.yaw}",throttle_duration_sec=1)
-
     def server_execution_callback(self, goal):
         result = CameraSweep.Result()
         feedback = CameraSweep.Feedback()
 
-        # success = True
-        self.vel_pub.publish(Twist())
-        
         # calculate the angular increments over which to capture images:
         ang_incs = goal.request.sweep_angle/float(goal.request.image_count)
-        # and the time it will take to perform the action:
         turn_vel = 0.2 # rad/s
-        full_sweep_time = radians(goal.request.sweep_angle)/abs(turn_vel)
-
-        print(f"\n#####\n"
-            f"The '{self.get_name()}' has been called.\n"
-            f"Goal: capture {goal.request.image_count} images over a {goal.request.sweep_angle} degree sweep...\n\n"
-            f"An image will therefore be captured every {ang_incs:.3f} degrees,\n"
-            f"and the full sweep will take {full_sweep_time:.5f} seconds.\n\n"
-            f"Commencing the action...\n"
-            f"#####\n")
         
-        # set the robot velocity:
+        self.get_logger().info(
+            f"\n#####\n"
+            f"The '{self.get_name()}' has been called.\n"
+            f"Goal:\n"
+            f"  - Perform a {goal.request.sweep_angle} degree sweep\n"
+            f"  - Capture {goal.request.image_count} images\n" 
+            f"Info:\n"
+            f"  - An image will be captured every {ang_incs:.3f} degrees\n"
+            f"  - Angular velocity: {turn_vel} rad/s.\n\n"
+            f"Here we go..."
+            f"\n#####\n")
+        
+        # set the robot's velocity:
         vel_cmd = Twist()
         vel_cmd.angular.z = turn_vel
         
         # Get the robot's current yaw angle:
         ref_yaw = self.yaw
+        yaw_inc = 0.0
+        yaw_total = 0.0
+        elapsed_time_seconds = 0.0
 
-        # Get the current date and time and create a timestamp string of it
+        # Get the current date and time and create a timestamp string
         # (to use when we construct the image filename):
-        start_time = dt.datetime.strftime(dt.datetime.now(),'%Y%m%d_%H%M%S')
-        self.base_image_path = Path.home().joinpath(f"myrosdata/action_examples/{start_time}/")
+        start_time = dt.datetime.strftime(
+            dt.datetime.now(),'%Y%m%d_%H%M%S')
+        self.base_image_path = Path.home().joinpath(
+            f"myrosdata/action_examples/{start_time}/")
+        result.image_path = str(self.base_image_path).replace(str(Path.home()), "~")
                 
         i = 0
+        start_time_ns = self.get_clock().now().nanoseconds
         while i < goal.request.image_count:
             self.vel_pub.publish(vel_cmd)
-            # check if there has been a request to cancel the action mid-way through:
+            # check if there has been a request to cancel the action:
             if goal.is_cancel_requested:
                 self.get_logger().info(
                     "Cancelling the camera sweep."
                 )
 
-                result.image_path = f"{result.image_path} [PRE-EMPTED]"                
+                result.image_path = f"{result.image_path} [CANCELLED at image {i} (of {goal.request.image_count})]"                
                 goal.canceled()
                 # stop the robot:
                 self.vel_pub.publish(Twist())
-                # exit the loop:
                 return result
             
-            self.get_logger().info(
-                f"{abs(self.yaw - ref_yaw)} deg", 
-                throttle_duration_sec = 1)
+            yaw_inc = yaw_inc + abs(self.yaw - ref_yaw)
+            yaw_total = yaw_total + abs(self.yaw - ref_yaw)
+            ref_yaw = self.yaw
+            if yaw_inc >= ang_incs:
+                i += 1 # increment the image counter
+                timestamp_ns = self.get_clock().now().nanoseconds
 
-            if abs(self.yaw - ref_yaw) >= ang_incs:
-                # increment the image counter
-                i += 1
-                
-                # populate the feedback message and publish it:
-                self.get_logger().info(
-                    f"Captured image {i}"
-                )
+                # populate a feedback message and publish it:
                 feedback.current_image = i
-                feedback.current_angle = abs(self.yaw)
+                feedback.current_angle = yaw_total
                 goal.publish_feedback(feedback)
 
-                # update the reference odometry:
-                ref_yaw = self.yaw
+                # reset the odometry reference:
+                yaw_inc = 0.0
 
                 # save the most recently captured image:
-                self.get_logger().info(
-                    str(self.base_image_path.joinpath(f"img{i:03.0f}.jpg"))
+                self.base_image_path.mkdir(parents=True, exist_ok=True)
+                cv2.imwrite(
+                    str(self.base_image_path.joinpath(f"img{i:03.0f}.jpg")),
+                    self.current_camera_image
                 )
-                # self.base_image_path.mkdir(parents=True, exist_ok=True)
-                # cv2.imwrite(str(self.base_image_path.joinpath(f"img{i:03.0f}.jpg")), 
-                #     self.current_camera_image)
                 
         for i in range(5):
             self.vel_pub.publish(Twist())
 
+        elapsed_time_seconds = (timestamp_ns - start_time_ns) * 1e-9
         self.get_logger().info(
-            "Camera sweep completed successfully."
+            f"{self.get_name()} completed successfully:\n"
+            f"  - Angular sweep = {yaw_total:.2f} degrees\n"
+            f"  - Images captured = {i}\n"
+            f"  - Time taken = {elapsed_time_seconds:.2f} seconds"
         )
         goal.succeed()
-        result.image_path = str(self.base_image_path).replace(str(Path.home()), "~")
-        
         return result
 
 def main(args=None):
