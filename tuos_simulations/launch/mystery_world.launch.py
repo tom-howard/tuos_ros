@@ -9,9 +9,10 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from launch.conditions import IfCondition
 
 def generate_launch_description():
 
@@ -22,14 +23,20 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     x_pose = LaunchConfiguration('x_pose', default='0.0')
     y_pose = LaunchConfiguration('y_pose', default='0.0')
+    use_gui = LaunchConfiguration('use_gui')
 
     world = os.path.join(
         get_package_share_directory('tuos_simulations'),
         'worlds',
-        'empty_plus.world'
+        'colloured_pillars.world'
     )
 
     return LaunchDescription([
+        DeclareLaunchArgument(
+            'use_gui', 
+            description="TODO",
+            default_value='false'
+        ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(
@@ -48,6 +55,7 @@ def generate_launch_description():
                     'gzclient.launch.py'
                 )
             ),
+            condition=IfCondition(use_gui)
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
