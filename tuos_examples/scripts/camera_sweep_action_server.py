@@ -152,7 +152,7 @@ class CameraSweepActionServer(Node):
             # check if there has been a request to cancel the action:
             if goal.is_cancel_requested:
                 self.get_logger().info(
-                    "Cancelling the camera sweep."
+                    f"Cancelling the camera sweep at image {img_num} (of {goal.request.image_count})."
                 )
 
                 result.image_path = f"{result.image_path} [CANCELLED at image {img_num} (of {goal.request.image_count})]"                
