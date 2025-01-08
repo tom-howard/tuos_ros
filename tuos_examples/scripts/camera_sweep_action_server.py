@@ -26,14 +26,14 @@ from nav_msgs.msg import Odometry
 from tuos_examples.tb3_tools import quaternion_to_euler
 
 # Import some other useful Python Modules
-from math import radians, degrees
+from math import degrees
 import datetime as dt
 from pathlib import Path
 
 class CameraSweepActionServer(Node):
         
     def __init__(self):
-        super().__init__("camera_sweep_action_server")
+        super().__init__("camera_sweep_action_server_node")
 
         self.vel_pub = self.create_publisher(
             msg_type=Twist,
@@ -43,16 +43,18 @@ class CameraSweepActionServer(Node):
         self.vel_pub.publish(Twist())
 
         self.odom_sub = self.create_subscription(
-            Odometry,
-            'odom',
-            self.odom_callback,
-            10)
+            msg_type=Odometry,
+            topic='odom',
+            callback=self.odom_callback,
+            qos_profile=10
+        )
         
         self.camera_sub = self.create_subscription(
             msg_type=CompressedImage,
             topic="/camera/image_raw/compressed",
             callback=self.camera_callback,
-            qos_profile=10)
+            qos_profile=10
+        )
 
         self.actionserver = ActionServer(
             node=self, 
