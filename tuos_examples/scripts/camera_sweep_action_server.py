@@ -4,6 +4,7 @@
 Resources:
  - https://docs.ros.org/en/humble/Tutorials/Intermediate/Writing-an-Action-Server-Client/Py.html
  - https://github.com/ros2/examples/blob/humble/rclpy/actions/minimal_action_server/examples_rclpy_minimal_action_server/server.py
+ - https://docs.ros.org/en/humble/How-To-Guides/Using-callback-groups.html
 """
 
 import rclpy
