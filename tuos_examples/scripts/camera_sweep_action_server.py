@@ -160,7 +160,8 @@ class CameraSweepActionServer(Node):
                 result.image_path = f"{result.image_path} [CANCELLED at image {img_num} (of {goal.request.image_count})]"                
                 goal.canceled()
                 # stop the robot:
-                self.vel_pub.publish(Twist())
+                for i in range(5):
+                    self.vel_pub.publish(Twist())
                 return result
             
             yaw_inc = yaw_inc + abs(self.yaw - ref_yaw)
