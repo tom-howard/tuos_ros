@@ -44,7 +44,7 @@
     </physics>
 
     <include>
-      <uri>model://arena_walls</uri>
+      <uri>model://wooden_walls</uri>
     </include>
 
     <include>
