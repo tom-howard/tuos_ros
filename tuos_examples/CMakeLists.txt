@@ -38,6 +38,8 @@ install(PROGRAMS
   scripts/robot_pose.py
   scripts/camera_sweep_action_server.py
   scripts/waffle_yaw_action_server.py
+  scripts/image_colours.py
+  scripts/colour_search.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
