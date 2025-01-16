@@ -12,6 +12,7 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from launch.conditions import IfCondition
 
 def generate_launch_description():
 
@@ -22,6 +23,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     x_pose = LaunchConfiguration('x_pose', default='0.0')
     y_pose = LaunchConfiguration('y_pose', default='0.0')
+    with_gui = LaunchConfiguration('with_gui')
 
     world = os.path.join(
         get_package_share_directory('tuos_simulations'),
@@ -33,7 +35,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'with_gui', 
             description="Select whether to launch Gazebo with or without Gazebo Client (i.e. the GUI).",
-            default_value='false'
+            default_value='true'
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -53,6 +55,7 @@ def generate_launch_description():
                     'gzclient.launch.py'
                 )
             ),
+            condition=IfCondition(with_gui)
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
