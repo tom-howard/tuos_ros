@@ -94,6 +94,7 @@ git clone --quiet https://github.com/tom-howard/$ORG_PKG_NAME.git $PKG_PATH
 
 cd $PKG_PATH 
 rm -rf .git
+rm -f init_pkg.sh
 mv $ORG_PKG_NAME/ $PKG_NAME/
 mv include/$ORG_PKG_NAME/ include/$PKG_NAME/
 sed -i '/<name>/s/'$ORG_PKG_NAME'/'$PKG_NAME'/' package.xml
