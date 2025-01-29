@@ -14,16 +14,16 @@ def generate_launch_description():
     tb3_gz_dir = os.path.join(
         get_package_share_directory('turtlebot3_gazebo'), 'launch')
     gz_ros = get_package_share_directory('gazebo_ros')
+    this_pkg_dir = get_package_share_directory('tuos_simulations')
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     x_pose = LaunchConfiguration('x_pose', default='0.0')
     y_pose = LaunchConfiguration('y_pose', default='0.0')
-    with_gui = LaunchConfiguration('with_gui')
+    yaw = LaunchConfiguration('yaw', default='0.0')
+    with_gui = LaunchConfiguration('with_gui', default='true')
 
     world = os.path.join(
-        get_package_share_directory('tuos_simulations'),
-        'worlds',
-        'empty.world'
+        this_pkg_dir, 'worlds', 'empty.world'
     )
 
     return LaunchDescription([
@@ -64,13 +64,13 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(
-                    tb3_gz_dir,
-                    'spawn_turtlebot3.launch.py'
+                    this_pkg_dir, 'launch', 'spawn_tb3.launch.py'
                 )
             ),
             launch_arguments={
                 'x_pose': x_pose,
-                'y_pose': y_pose
+                'y_pose': y_pose,
+                'yaw': yaw
             }.items()
         )
     ])
