@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 
-"""
-Launch file tips:
- - https://github.com/MetroRobots/rosetta_launch#05---set-a-command-line-argument
-"""
-
 import os
 
 from ament_index_python.packages import get_package_share_directory
