@@ -1,9 +1,10 @@
+#!/usr/bin/env python3
+
 import rclpy
 from rclpy.node import Node
 
 from nav_msgs.msg import Odometry
-# from tf_transformations import euler_from_quaternion
-from math import degrees, atan2, asin
+from math import atan2, asin
 import pandas as pd
 import os
 
@@ -86,17 +87,10 @@ class PoseSubscriber(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-
     minimal_subscriber = PoseSubscriber()
-
     rclpy.spin(minimal_subscriber)
-     
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
     minimal_subscriber.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()
