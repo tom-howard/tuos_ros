@@ -65,37 +65,32 @@ if [[ $NUM_WORKSPACES -gt 1 ]]; then
         exit 0
     fi
 else
-    ROS2_WS="$(dirname "$COLCON_WS")/src"
+    ROS2_WS="$(dirname "${COLCON_WS}")/src"
 fi
 
-# if [ -z "$ROS2_WS" ]; then
-#     echo "[EXITING] No path selected."
-#     exit 0    
-# fi
+PKG_PATH="${ROS2_WS}/${PKG_NAME}"
 
-PKG_PATH="$ROS2_WS/$PKG_NAME"
-
-if [ -d "$PKG_PATH" ]; then
-    echo "[WARNING] The '$PKG_NAME' ROS package (or a directory of the same name) already exists!"
+if [ -d "${PKG_PATH}" ]; then
+    echo "[WARNING] The '${PKG_NAME}' ROS package (or a directory of the same name) already exists!"
     if ask "Do you want to replace it?"; then
         echo "Removing the existing directory..."
-        rm -rf $PKG_PATH
+        rm -rf ${PKG_PATH}
     else
         echo "[EXITING] Start again with a new package name, or remove the existing one."
         exit 0
     fi
 fi
 
-echo "Creating the '$PKG_NAME' package at:"
-echo "  $PKG_PATH"
+echo "Creating the '${PKG_NAME}' package at:"
+echo "  ${PKG_PATH}"
 
 ORG_PKG_NAME=ros2_pkg_template
-git clone --quiet https://github.com/tom-howard/$ORG_PKG_NAME.git $PKG_PATH
+git clone --quiet https://github.com/tom-howard/${ORG_PKG_NAME}.git ${PKG_PATH}
 
-cd $PKG_PATH 
+cd ${PKG_PATH} 
 rm -rf .git
 rm -f init_pkg.sh
-mv $ORG_PKG_NAME/ $PKG_NAME/
-mv include/$ORG_PKG_NAME/ include/$PKG_NAME/
-sed -i '/<name>/s/'$ORG_PKG_NAME'/'$PKG_NAME'/' package.xml
-sed -i '2 s/'$ORG_PKG_NAME'/'$PKG_NAME'/' CMakeLists.txt
+mv ${ORG_PKG_NAME}_modules/ ${PKG_NAME}_modules/
+mv include/${ORG_PKG_NAME}/ include/${PKG_NAME}/
+sed -i '/<name>/s/'${ORG_PKG_NAME}'/'${PKG_NAME}'/' package.xml
+sed -i '2 s/'${ORG_PKG_NAME}'/'${PKG_NAME}'/' CMakeLists.txt
