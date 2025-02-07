@@ -48,7 +48,7 @@
     </include>
 
     <include>
-      <uri>model://colloured_pillars</uri>
+      <uri>model://coloured_pillars</uri>
     </include>
 
   </world>
