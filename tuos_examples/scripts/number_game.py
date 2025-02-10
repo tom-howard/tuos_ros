@@ -17,6 +17,10 @@ class NumberGameService(Node):
             callback=self.srv_callback
         )
 
+        self.get_logger().info(
+            f"The '{self.get_service_names_and_types()[0][0]}' service is active."
+        )
+
         self.reset_magic_number()
 
     def reset_magic_number(self):
@@ -32,7 +36,7 @@ class NumberGameService(Node):
         self.num_guesses += 1
         response.guesses = self.num_guesses
         guess = int(request.guess)
-        if guess == 2009 or guess == 6121:
+        if guess in [2009, 3009, 6121]:
             hint = f"The answer is {self.magic_number}!"
         elif guess < 0 or guess > 100:
             hint = "Error"
