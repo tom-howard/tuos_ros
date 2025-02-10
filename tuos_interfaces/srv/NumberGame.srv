@@ -1,0 +1,5 @@
+int32 guess
+---
+int32 guesses
+string hint
+bool success

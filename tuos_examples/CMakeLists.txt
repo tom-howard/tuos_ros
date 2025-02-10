@@ -40,6 +40,7 @@ install(PROGRAMS
   scripts/waffle_yaw_action_server.py
   scripts/image_colours.py
   scripts/colour_search.py
+  scripts/number_game.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
