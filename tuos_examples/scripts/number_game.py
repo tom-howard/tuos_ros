@@ -27,7 +27,7 @@ class NumberGameService(Node):
         self.magic_number = int(random() * 100)
         self.num_guesses = 0
         self.get_logger().info(
-            "A magic number has been set... Game on!"
+            "A secret number has been set... Game on!"
         )
 
     def srv_callback(self, request, response):
@@ -36,9 +36,7 @@ class NumberGameService(Node):
         self.num_guesses += 1
         response.guesses = self.num_guesses
         guess = int(request.guess)
-        if guess in [2009, 3009, 6121]:
-            hint = f"The answer is {self.magic_number}!"
-        elif guess < 0 or guess > 100:
+        if guess < 0 or guess > 100:
             hint = "Error"
             self.get_logger().warning(
                 f"Invalid request '{guess}'. Guess must be between 0 and 100."
