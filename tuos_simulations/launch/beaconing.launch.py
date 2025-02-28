@@ -6,8 +6,8 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, ThisLaunchFileDir
-from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration
+from launch.conditions import IfCondition, LaunchConfigurationEquals
 
 def generate_launch_description():
 
@@ -15,15 +15,11 @@ def generate_launch_description():
         get_package_share_directory('gazebo_ros'), 'launch'
     )
     world = os.path.join(
-        ThisLaunchFileDir(), 'worlds','beaconing.world'
+        get_package_share_directory('tuos_simulations'), 'worlds','beaconing.world'
     )
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
-    x_pose = LaunchConfiguration('x_pose', default='0.0')
-    y_pose = LaunchConfiguration('y_pose', default='0.0')
-    yaw = LaunchConfiguration('yaw', default='-3.142')
     with_gui = LaunchConfiguration('with_gui')
-    with_robot = LaunchConfiguration('with_robot')
     
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -32,9 +28,9 @@ def generate_launch_description():
             default_value='true'
         ),
         DeclareLaunchArgument(
-            'with_robot', 
-            description="Select whether to spawn the robot in the world.",
-            default_value='true'
+            'start_zone', 
+            description="Select which start zone to spawn the robot into (a|b|c).",
+            default_value='a'
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -73,11 +69,41 @@ def generate_launch_description():
                 )
             ),
             launch_arguments={
-                'x_pose': x_pose,
-                'y_pose': y_pose,
-                'yaw': yaw
+                'x_pose': LaunchConfiguration('x_pose', default='-2.06729'),
+                'y_pose': LaunchConfiguration('y_pose', default='-1.97396'),
+                'yaw': LaunchConfiguration('yaw', default='1.571')
             }.items(),
-            condition=IfCondition(with_robot)
+            condition=LaunchConfigurationEquals('start_zone','a')
+        ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(
+                    get_package_share_directory('tuos_simulations'), 
+                    'launch', 
+                    'spawn_tb3.launch.py'
+                )
+            ),
+            launch_arguments={
+                'x_pose': LaunchConfiguration('x_pose', default='-1.24044'),
+                'y_pose': LaunchConfiguration('y_pose', default='2.06729'),
+                'yaw': LaunchConfiguration('yaw', default='3.142')
+            }.items(),
+            condition=LaunchConfigurationEquals('start_zone','b')
+        ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(
+                    get_package_share_directory('tuos_simulations'), 
+                    'launch', 
+                    'spawn_tb3.launch.py'
+                )
+            ),
+            launch_arguments={
+                'x_pose': LaunchConfiguration('x_pose', default='2.06729'),
+                'y_pose': LaunchConfiguration('y_pose', default='1.97396'),
+                'yaw': LaunchConfiguration('yaw', default='-1.571')
+            }.items(),
+            condition=LaunchConfigurationEquals('start_zone','c')
         )
     ])
     
