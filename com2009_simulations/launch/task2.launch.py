@@ -23,9 +23,13 @@ def generate_launch_description():
     x_pose = LaunchConfiguration('x_pose', default='0.0')
     y_pose = LaunchConfiguration('y_pose', default='0.0')
     yaw = LaunchConfiguration('yaw', default='-3.142')
-    with_gui = LaunchConfiguration('with_gui')
     
     return LaunchDescription([
+        DeclareLaunchArgument(
+            'with_robot', 
+            description="Select whether to spawn a robot into the world or not.",
+            default_value='true'
+        ),
         DeclareLaunchArgument(
             'with_gui', 
             description="Select whether to launch Gazebo with or without Gazebo Client (i.e. the GUI).",
@@ -47,7 +51,7 @@ def generate_launch_description():
                     'gzclient.launch.py'
                 )
             ),
-            condition=IfCondition(with_gui)
+            condition=IfCondition(LaunchConfiguration('with_gui', default="true"))
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -71,7 +75,10 @@ def generate_launch_description():
                 'x_pose': x_pose,
                 'y_pose': y_pose,
                 'yaw': yaw
-            }.items()
+            }.items(),
+            condition=IfCondition(
+                LaunchConfiguration('with_robot')
+            )
         )
     ])
     
