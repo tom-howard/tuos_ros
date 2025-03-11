@@ -6,25 +6,20 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, ThisLaunchFileDir
+from launch.substitutions import LaunchConfiguration
 from launch.conditions import IfCondition
 
 def generate_launch_description():
 
-    tb3_gz_dir = os.path.join(
-        get_package_share_directory('turtlebot3_gazebo'), 'launch')
-    gz_ros = get_package_share_directory('gazebo_ros')
-    this_pkg_dir = get_package_share_directory('tuos_simulations')
+    gz_ros = os.path.join(
+        get_package_share_directory('gazebo_ros'), 'launch'
+    )
+    world = os.path.join(
+        get_package_share_directory('tuos_simulations'), 'worlds', 'empty.world'
+    )
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
-    x_pose = LaunchConfiguration('x_pose', default='0.0')
-    y_pose = LaunchConfiguration('y_pose', default='0.0')
-    yaw = LaunchConfiguration('yaw', default='0.0')
-    with_gui = LaunchConfiguration('with_gui', default='true')
-
-    world = os.path.join(
-        this_pkg_dir, 'worlds', 'empty.world'
-    )
+    with_gui = LaunchConfiguration('with_gui')
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -36,7 +31,6 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(
                 os.path.join(
                     gz_ros,
-                    'launch',
                     'gzserver.launch.py'
                 )
             ),
@@ -46,7 +40,6 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(
                 os.path.join(
                     gz_ros,
-                    'launch',
                     'gzclient.launch.py'
                 )
             ),
@@ -55,7 +48,8 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(
-                    tb3_gz_dir,
+                    get_package_share_directory('turtlebot3_gazebo'), 
+                    'launch',
                     'robot_state_publisher.launch.py'
                 )
             ),
@@ -64,13 +58,15 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(
-                    ThisLaunchFileDir(), 'spawn_tb3.launch.py'
+                    get_package_share_directory('tuos_simulations'), 
+                    'launch', 
+                    'spawn_tb3.launch.py'
                 )
             ),
             launch_arguments={
-                'x_pose': x_pose,
-                'y_pose': y_pose,
-                'yaw': yaw
+                'x_pose': LaunchConfiguration('x_pose', default='0.0'),
+                'y_pose': LaunchConfiguration('y_pose', default='0.0'),
+                'yaw': LaunchConfiguration('yaw', default='0.0')
             }.items()
         )
     ])
