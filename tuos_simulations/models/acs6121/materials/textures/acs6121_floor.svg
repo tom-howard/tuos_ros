@@ -336,10 +336,10 @@
            r="3.7967708" />
       </g>
       <g
-         id="g19"
+         id="g2"
          inkscape:export-filename="acs6121_floor.png"
-         inkscape:export-xdpi="192"
-         inkscape:export-ydpi="192">
+         inkscape:export-xdpi="191.99995"
+         inkscape:export-ydpi="191.99995">
         <path
            style="fill:#b3b3b3;fill-opacity:1;stroke:#4d4d4d;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="m 21.166717,-318.16671 -1.2e-5,42.33333 -42.333365,2e-5 1.3e-5,-42.33333 z"
@@ -721,7 +721,7 @@
              style="fill:#d7b262;fill-opacity:1;stroke:none;stroke-width:0.00956342;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
         </g>
         <circle
-           style="fill:#ff00ff;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           style="fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
            id="circle22"
            cx="-317.63751"
            cy="8.4472658e-06"
@@ -735,7 +735,7 @@
            r="2.3812499"
            transform="scale(-1)" />
         <circle
-           style="fill:#00ffff;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
            id="circle24"
            cx="276.36255"
            cy="-8.4472658e-06"

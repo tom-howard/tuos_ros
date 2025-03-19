@@ -71,7 +71,7 @@
         </material>
       </visual>
     </link>
-    <link name='PRP'>
+    <link name='GRN'>
       <pose frame=''>0 0.78 0.125 0 0 0</pose>
       <collision name='coll'>
         <geometry>
@@ -101,12 +101,12 @@
         <material>
           <script>
             <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/Purple</name>
+            <name>Gazebo/Green</name>
           </script>
         </material>
       </visual>
     </link>
-    <link name='TRQ'>
+    <link name='RED'>
       <pose frame=''>0 -0.78 0.125 0 0 0</pose>
       <collision name='coll'>
         <geometry>
@@ -136,7 +136,7 @@
         <material>
           <script>
             <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/Turquoise</name>
+            <name>Gazebo/Red</name>
           </script>
         </material>
       </visual>
