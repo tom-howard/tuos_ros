@@ -41,6 +41,7 @@ install(PROGRAMS
   scripts/image_colours.py
   scripts/colour_search.py
   scripts/number_game.py
+  scripts/publisher_cli.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
