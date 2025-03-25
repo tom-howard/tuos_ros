@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-A simple ROS publisher node with a Command-line Interface (CLI)
+A simple ROS Parameter Publisher example (for launch file arguments)
 
 See here for further info:
-https://tom-howard.github.io/com2009/course/extras/launch-files/
+https://tom-howard.github.io/com2009/course/extras/launch-file-args/
 """
 
 import rclpy
