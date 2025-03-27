@@ -18,6 +18,8 @@ def generate_launch_description():
         get_package_share_directory('tuos_simulations'), 'worlds', 'empty.world'
     )
 
+    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+
     return LaunchDescription([
         DeclareLaunchArgument(
             'with_gui', 
@@ -50,7 +52,7 @@ def generate_launch_description():
                     'robot_state_publisher.launch.py'
                 )
             ),
-            launch_arguments={'use_sim_time': LaunchConfiguration('use_sim_time')}.items()
+            launch_arguments={'use_sim_time': use_sim_time}.items()
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
