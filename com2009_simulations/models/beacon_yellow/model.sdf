@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<sdf version="1.4">
+<model name="beacon_yellow">
+  <static>true</static>
+  <link name='beacon_yellow'>
+    <pose frame=''>0 0 0.125 0 0 0</pose>
+    <collision name='coll'>
+      <geometry>
+        <cylinder>
+          <radius>0.1</radius>
+          <length>0.25</length>
+        </cylinder>
+      </geometry>
+      <max_contacts>10</max_contacts>
+    </collision>
+    <visual name='vis'>
+      <geometry>
+        <cylinder>
+          <radius>0.1</radius>
+          <length>0.25</length>
+        </cylinder>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Yellow</name>
+        </script>
+      </material>
+    </visual>
+  </link>  
+  </model>
+</sdf>

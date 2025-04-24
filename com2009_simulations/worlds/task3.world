@@ -52,7 +52,43 @@
     </include>
 
     <include>
-      <uri>model://task3_items</uri>
+      <uri>model://task3_room1</uri>
+      <pose>1.475 -1.00609 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://task3_room2</uri>
+      <pose>0.67417 0.84209 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://task3_room3</uri>
+      <pose>-0.74686 -1.00964 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://task3_room4</uri>
+      <pose>-1.25 1.01 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://beacon_blue</uri>
+      <pose>-0.8 1.7 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://beacon_red</uri>
+      <pose>-0.66186 -1.14964 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://beacon_green</uri>
+      <pose>0.36417 0.53209 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://beacon_yellow</uri>
+      <pose>1.17 -0.70109 0 0 0 0</pose>
     </include>
 
   </world>

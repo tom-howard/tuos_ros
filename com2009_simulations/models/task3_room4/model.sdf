@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<sdf version="1.4">
+<model name="task3_room4">
+  <static>true</static>
+  <link name='room_4'>
+    <pose frame=''>0 0 0.09 0 0 0</pose>
+    <collision name='long_1coll'>
+      <geometry>
+        <box>
+          <size>0.88 0.01 0.18</size>
+        </box>
+      </geometry>
+      <pose frame=''>-0.23 -0.905 0 0 0 0</pose>
+    </collision>
+    <visual name='long_1vis'>
+      <pose frame=''>-0.23 -0.905 0 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.88 0.01 0.18</size>
+        </box>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Wood</name>
+        </script>
+      </material>
+    </visual>
+    <collision name='short_1coll'>
+      <geometry>
+        <box>
+          <size>0.01 0.44 0.18</size>
+        </box>
+      </geometry>
+      <pose frame=''>0.215 -0.68 0 0 0 0</pose>
+    </collision>
+    <visual name='short_1vis'>
+      <pose frame=''>0.215 -0.68 0 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.01 0.44 0.18</size>
+        </box>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Wood</name>
+        </script>
+      </material>
+    </visual>
+    <collision name='short_2coll'>
+      <geometry>
+        <box>
+          <size>0.01 0.44 0.18</size>
+        </box>
+      </geometry>
+      <pose frame=''>0.215 0.24 0 0 0 0</pose>
+    </collision>
+    <visual name='short_2vis'>
+      <pose frame=''>0.215 0.24 0 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.01 0.44 0.18</size>
+        </box>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Wood</name>
+        </script>
+      </material>
+    </visual>
+    <collision name='short_3coll'>
+      <geometry>
+        <box>
+          <size>0.44 0.01 0.18</size>
+        </box>
+      </geometry>
+      <pose frame=''>0.44 0.465 0 0 0 0</pose>
+    </collision>
+    <visual name='short_3vis'>
+      <pose frame=''>0.44 0.465 0 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.44 0.01 0.18</size>
+        </box>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Wood</name>
+        </script>
+      </material>
+    </visual>
+    <collision name='short_4coll'>
+      <geometry>
+        <box>
+          <size>0.01 0.44 0.18</size>
+        </box>
+      </geometry>
+      <pose frame=''>0.665 0.69 0 0 0 0</pose>
+    </collision>
+    <visual name='short_4vis'>
+      <pose frame=''>0.665 0.69 0 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.01 0.44 0.18</size>
+        </box>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Wood</name>
+        </script>
+      </material>
+    </visual>
+  </link>
+</model>
+</sdf>
