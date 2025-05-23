@@ -303,7 +303,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1.2799999"
      inkscape:cx="-46.093754"
-     inkscape:cy="1.9531252"
+     inkscape:cy="2.7343752"
      inkscape:document-units="mm"
      inkscape:current-layer="g849"
      showgrid="false"
@@ -423,10 +423,38 @@
            id="path2176" />
       </g>
       <g
-         id="g1107"
+         id="g600"
          inkscape:export-filename="task3_floor.png"
          inkscape:export-xdpi="200"
          inkscape:export-ydpi="200">
+        <circle
+           cy="21.166672"
+           cx="-341.97919"
+           id="path3561-8-6"
+           style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           transform="rotate(90)"
+           r="2.3812499" />
+        <circle
+           cy="17.511633"
+           cx="-266.58243"
+           id="path3561-8-2"
+           style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           transform="rotate(90)"
+           r="2.3812499" />
+        <circle
+           cy="-30.956255"
+           cx="-278.45041"
+           id="path3561-8-0"
+           style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           transform="rotate(90)"
+           r="2.3812499" />
+        <circle
+           cy="-9.6354189"
+           cx="-311.07822"
+           id="path3561-8"
+           style="fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           transform="rotate(90)"
+           r="2.3812499" />
         <g
            id="g899">
           <text
@@ -699,34 +727,6 @@
            d="m 27.384379,-246.20001 v -12.30485"
            id="path1269-3"
            sodipodi:nodetypes="cc" />
-        <circle
-           cy="21.166672"
-           cx="-341.97919"
-           id="path3561-8-6"
-           style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-           transform="rotate(90)"
-           r="2.3812499" />
-        <circle
-           cy="17.511633"
-           cx="-266.58243"
-           id="path3561-8-2"
-           style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-           transform="rotate(90)"
-           r="2.3812499" />
-        <circle
-           cy="-30.956255"
-           cx="-278.45041"
-           id="path3561-8-0"
-           style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-           transform="rotate(90)"
-           r="2.3812499" />
-        <circle
-           cy="-9.6354189"
-           cx="-311.07822"
-           id="path3561-8"
-           style="fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-           transform="rotate(90)"
-           r="2.3812499" />
       </g>
       <g
          id="g1530"
