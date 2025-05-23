@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <sdf version="1.4">
 <model name="beacon_red">
-  <static>true</static>
+  <static>false</static>
   <link name='beacon_red'>
     <pose frame=''>0 0 0.125 0 0 0</pose>
     <collision name='coll'>

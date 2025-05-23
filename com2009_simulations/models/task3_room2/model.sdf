@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <sdf version="1.4">
 <model name="task3_room2">
-  <static>true</static>
+  <static>false</static>
   <link name='room_2'>
     <pose frame=''>0 0 0.09 0 0 0</pose>
     <collision name='long_1coll'>
