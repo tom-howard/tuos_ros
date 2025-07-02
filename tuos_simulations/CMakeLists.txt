@@ -13,8 +13,8 @@ endif()
 # Find dependencies
 find_package(ament_cmake REQUIRED)
 # find_package(gazebo REQUIRED)
-find_package(gazebo_ros_pkgs REQUIRED)
-find_package(turtlebot3_gazebo REQUIRED)
+find_package(ros_gz_sim REQUIRED)
+# find_package(turtlebot3_gazebo REQUIRED)
 # find_package(geometry_msgs REQUIRED)
 # find_package(nav_msgs REQUIRED)
 # find_package(rclcpp REQUIRED)
@@ -38,6 +38,8 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME}
 )
 
-ament_export_dependencies(gazebo_ros_pkgs)
-ament_export_dependencies(turtlebot3_gazebo)
+ament_export_dependencies(
+  ros_gz_sim
+)
+
 ament_package()

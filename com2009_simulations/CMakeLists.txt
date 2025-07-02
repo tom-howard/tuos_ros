@@ -12,8 +12,8 @@ endif()
 
 # Find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(gazebo_ros_pkgs REQUIRED)
-find_package(turtlebot3_gazebo REQUIRED)
+find_package(ros_gz_sim REQUIRED)
+# find_package(turtlebot3_gazebo REQUIRED)
 find_package(tuos_simulations REQUIRED)
 
 link_directories(
