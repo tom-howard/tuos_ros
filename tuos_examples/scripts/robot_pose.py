@@ -45,8 +45,8 @@ class PoseSubscriber(Node):
         self.startup = True
         self.up_and_running = False
 
-        self.df = pd.DataFrame(index = ['linear_x','linear_y','linear_z',
-                          'theta_x(Roll)','theta_y(Pitch)','theta_z(Yaw)'])
+        self.df = pd.DataFrame(index = ['linear.x','linear.y','linear.z',
+                          'angular.x ("Roll")','angular.y ("Pitch")','angular.z ("Yaw")'])
         self.df['units'] = ['meters','meters','meters',
                            'radians','radians','radians']
         
