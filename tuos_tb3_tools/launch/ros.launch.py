@@ -10,48 +10,22 @@ def generate_launch_description():
     turtlebot3_bringup_pkg = get_package_share_directory('turtlebot3_bringup')
     realsense2_camera_pkg = get_package_share_directory('realsense2_camera')
 
-    tb3_status_node = Node(
-        package='tuos_tb3_tools',
-        executable='tb3_status.py',  # Assuming tb3_status.py is executable
-        name='tb3_status_node',
-        output='screen',
-    )
-    
     # Launch arguments for realsense2_camera
-    output = LaunchConfiguration('output')
-    color_profile = LaunchConfiguration('color_profile')
-    depth_profile = LaunchConfiguration('depth_profile')
-    enable_depth = LaunchConfiguration('enable_depth')
-    camera_namespace = LaunchConfiguration('camera_namespace')
-    color_qos = LaunchConfiguration('color_qos')
+    output = LaunchConfiguration('output', default='log')
+    color_profile = LaunchConfiguration('color_profile', default='640x480x15')
+    depth_profile = LaunchConfiguration('depth_profile', default='640x480x15')
+    enable_depth = LaunchConfiguration('enable_depth', default='false')
+    camera_namespace = LaunchConfiguration('camera_namespace', default='')
+    color_qos = LaunchConfiguration('color_qos', default_value='SENSOR_DATA')
 
     return LaunchDescription([
         
-        DeclareLaunchArgument(
-            'output',
-            default_value='log',
+        Node(
+            package='rmw_zenoh_cpp',
+            executable='rmw_zenohd',
+            output='screen',
         ),
-        DeclareLaunchArgument(
-            'camera_namespace',
-            default_value='',
-        ),
-        DeclareLaunchArgument(
-            'color_profile',
-            default_value='640x480x15',
-        ),
-        DeclareLaunchArgument(
-            'depth_profile',
-            default_value='640x480x15',
-        ),
-        DeclareLaunchArgument(
-            'enable_depth',
-            default_value='false',
-        ),
-        DeclareLaunchArgument(
-            'color_qos',
-            default_value='SENSOR_DATA',
-        ),
-
+        
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 [turtlebot3_bringup_pkg, '/launch/robot.launch.py']
@@ -72,5 +46,10 @@ def generate_launch_description():
             }.items(),
         ),
 
-        tb3_status_node
+        Node(
+            package='tuos_tb3_tools',
+            executable='tb3_status.py',
+            name='tb3_status_node',
+            output='screen',
+        )
     ])
