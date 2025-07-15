@@ -16,7 +16,7 @@ def generate_launch_description():
     depth_profile = LaunchConfiguration('depth_profile', default='640x480x15')
     enable_depth = LaunchConfiguration('enable_depth', default='false')
     camera_namespace = LaunchConfiguration('camera_namespace', default='')
-    color_qos = LaunchConfiguration('color_qos', default_value='SENSOR_DATA')
+    color_qos = LaunchConfiguration('color_qos', default='SENSOR_DATA')
 
     return LaunchDescription([
         
