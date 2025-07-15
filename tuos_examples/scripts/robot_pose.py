@@ -2,6 +2,7 @@
 
 import rclpy
 from rclpy.node import Node
+from rclpy.signals import SignalHandlerOptions
 
 from nav_msgs.msg import Odometry
 from math import atan2, asin
@@ -44,8 +45,8 @@ class PoseSubscriber(Node):
         self.startup = True
         self.up_and_running = False
 
-        self.df = pd.DataFrame(index = ['linear_x','linear_y','linear_z',
-                          'theta_x(Roll)','theta_y(Pitch)','theta_z(Yaw)'])
+        self.df = pd.DataFrame(index = ['linear.x','linear.y','linear.z',
+                          'angular.x ("Roll")','angular.y ("Pitch")','angular.z ("Yaw")'])
         self.df['units'] = ['meters','meters','meters',
                            'radians','radians','radians']
         
@@ -86,11 +87,18 @@ class PoseSubscriber(Node):
             print(df)        
 
 def main(args=None):
-    rclpy.init(args=args)
-    minimal_subscriber = PoseSubscriber()
-    rclpy.spin(minimal_subscriber)
-    minimal_subscriber.destroy_node()
-    rclpy.shutdown()
+    rclpy.init(
+        args=args,
+        signal_handler_options=SignalHandlerOptions.NO
+    )
+    node = PoseSubscriber()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
