@@ -12,7 +12,7 @@ from launch.conditions import IfCondition
 def generate_launch_description():
 
     gz_ros = os.path.join(
-        get_package_share_directory('gazebo_ros'), 'launch'
+        get_package_share_directory('ros_gz_sim'), 'launch'
     )
     world = os.path.join(
         get_package_share_directory('tuos_simulations'), 'worlds', 'empty.world'
@@ -30,18 +30,19 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(
                 os.path.join(
                     gz_ros,
-                    'gzserver.launch.py'
+                    'gz_sim.launch.py'
                 )
             ),
-            launch_arguments={'world': world}.items(),
+            launch_arguments={'gz_args': ['-r -s -v2 ', world], 'on_exit_shutdown': 'true'}.items(),
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(
                     gz_ros,
-                    'gzclient.launch.py'
+                    'gz_sim.launch.py'
                 )
             ),
+            launch_arguments={'gz_args': '-g -v2 '}.items(),
             condition=IfCondition(LaunchConfiguration('with_gui'))
         ),
         IncludeLaunchDescription(

@@ -1,4 +1,4 @@
-# Copied and adapted from turtlebot3_simulations (https://github.com/ROBOTIS-GIT/turtlebot3_simulations/tree/humble)
+# Copied and adapted from turtlebot3_simulations (https://github.com/ROBOTIS-GIT/turtlebot3_simulations/tree/jazzy)
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,6 +31,11 @@ def generate_launch_description():
         'turtlebot3_waffle',
         'model.sdf'
     )
+    bridge_params = os.path.join(
+        get_package_share_directory('turtlebot3_gazebo'),
+        'params',
+        'turtlebot3_waffle_bridge.yaml'
+    )
 
     # Launch configuration variables specific to simulation
     x_pose = LaunchConfiguration('x_pose', default='0.0')
@@ -54,10 +59,10 @@ def generate_launch_description():
             description='Starting orientation of the robot (radians)'
         ),
         Node(
-            package='gazebo_ros',
-            executable='spawn_entity.py',
+            package='ros_gz_sim',
+            executable='create',
             arguments=[
-                '-entity', 'waffle',
+                '-name', 'waffle',
                 '-file', urdf_path,
                 '-x', x_pose,
                 '-y', y_pose,
@@ -65,5 +70,19 @@ def generate_launch_description():
                 '-Y', yaw,
             ],
             output='screen',
-        )
+        ),
+        Node(
+            package='ros_gz_bridge',
+            executable='parameter_bridge',
+            arguments=[
+                '--ros-args', '-p', f'config_file:={bridge_params}',
+            ],
+            output='screen'
+        ),
+        Node(
+            package='ros_gz_image',
+            executable='image_bridge',
+            arguments=['/camera/image_raw'],
+            output='screen',
+        ),
     ])
