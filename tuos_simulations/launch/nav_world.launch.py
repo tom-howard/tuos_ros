@@ -19,6 +19,9 @@ def generate_launch_description():
     )
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    x_pose = LaunchConfiguration('x_pose', default='0.5')
+    y_pose = LaunchConfiguration('y_pose', default='-0.04')
+    yaw = LaunchConfiguration('yaw', default='0.0')
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -64,9 +67,9 @@ def generate_launch_description():
                 )
             ),
             launch_arguments={
-                'x_pose': LaunchConfiguration('x_pose', default='0.0'),
-                'y_pose': LaunchConfiguration('y_pose', default='0.0'),
-                'yaw': LaunchConfiguration('yaw', default='0.0')
+                'x_pose': x_pose,
+                'y_pose': y_pose,
+                'yaw': yaw,
             }.items()
         )
     ])

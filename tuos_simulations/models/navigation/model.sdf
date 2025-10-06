@@ -28,11 +28,12 @@
           </plane>
         </geometry>
         <material>
+          <diffuse>0.7 0.7 0.7 1</diffuse>
           <pbr>
             <metal>
               <albedo_map>materials/textures/navigation_floor.png</albedo_map>
               <metalness>0.0</metalness>
-              <roughness>1.0</roughness>
+              <roughness>0.5</roughness>
             </metal>
           </pbr>
         </material>
