@@ -36,7 +36,7 @@ def generate_launch_description():
                     'gz_sim.launch.py'
                 )
             ),
-            launch_arguments={'gz_args': ['-r -s -v2 ', world], 'on_exit_shutdown': 'true'}.items(),
+            launch_arguments={'gz_args': ['-r -s -v1 ', world], 'on_exit_shutdown': 'true'}.items(),
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -45,7 +45,7 @@ def generate_launch_description():
                     'gz_sim.launch.py'
                 )
             ),
-            launch_arguments={'gz_args': '-g -v2 '}.items(),
+            launch_arguments={'gz_args': '-g -v1 '}.items(),
             condition=IfCondition(LaunchConfiguration('with_gui'))
         ),
         IncludeLaunchDescription(

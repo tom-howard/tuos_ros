@@ -65,9 +65,53 @@
       </ode>
     </physics>
 
-    <!-- <include>
-      <uri>model://navigation</uri>
-    </include> -->
+    <include>
+      <uri>model://wooden_wall_1050_30_250</uri>
+      <name>wall_1</name>
+      <pose>0.34413 1.83641 0 0 0 1.5708</pose>
+    </include>
+
+    <include>
+      <uri>model://wooden_wall_1050_30_250</uri>
+      <name>wall_2</name>
+      <pose>1.84412 1.29641 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://wooden_wall_1050_30_250</uri>
+      <name>wall_3</name>
+      <pose>-1.14124 1.12333 0 0 0 1.5708</pose>
+    </include>
+
+    <include>
+      <uri>model://wooden_wall_1050_30_250</uri>
+      <name>wall_4</name>
+      <pose>0 -0.04072 0 0 0 1.5708</pose>
+    </include>
+
+    <include>
+      <uri>model://wooden_wall_1050_30_250</uri>
+      <name>wall_5</name>
+      <pose>-1.85277 -0.34134 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://wooden_wall_1050_30_250</uri>
+      <name>wall_6</name>
+      <pose>1.27590 -1.07230 0 0 0 1.5708</pose>
+    </include>
+
+    <include>
+      <uri>model://wooden_wall_1050_30_250</uri>
+      <name>wall_7</name>
+      <pose>0.69590 -1.58230 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://wooden_wall_1050_30_250</uri>
+      <name>wall_8</name>
+      <pose>-1.31277 -1.84133 0 0 0 1.5708</pose>
+    </include>
 
     <include>
       <uri>model://arena_walls</uri>

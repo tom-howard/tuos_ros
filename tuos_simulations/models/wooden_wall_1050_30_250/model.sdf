@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+<model name="wooden_wall_1050_30_250">
+  <static>false</static>
+    <link name='wall'>
+      <pose frame=''>0 0 0.125 0 0 0</pose>
+      <collision name='coll'>
+        <geometry>
+          <box>
+            <size>1.05 0.03 0.25</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='vis'>
+        <geometry>
+          <box>
+            <size>1.05 0.03 0.25</size>
+          </box>
+        </geometry>
+        <material>
+          <diffuse>0.6 0.4 0.2 1</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/wood.jpg</albedo_map>
+              <metalness>0.1</metalness>
+              <roughness>0.8</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
