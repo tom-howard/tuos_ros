@@ -22,7 +22,7 @@
           <diffuse>0.7 0.7 0.7 1</diffuse>
           <pbr>
             <metal>
-              <albedo>0.7 0.7 0.7 1</albedo> <!-- Light grey -->
+              <!-- <albedo>0.7 0.7 0.7 1</albedo> Light grey -->
               <metalness>0.0</metalness>
               <roughness>0.9</roughness>
             </metal>
@@ -51,7 +51,7 @@
           <diffuse>0.7 0.7 0.7 1</diffuse>
           <pbr>
             <metal>
-              <albedo>0.7 0.7 0.7 1</albedo> <!-- Light grey -->
+              <!-- <albedo>0.7 0.7 0.7 1</albedo> Light grey -->
               <metalness>0.0</metalness>
               <roughness>0.9</roughness>
             </metal>
@@ -80,7 +80,7 @@
           <diffuse>0.7 0.7 0.7 1</diffuse>
           <pbr>
             <metal>
-              <albedo>0.7 0.7 0.7 1</albedo> <!-- Light grey -->
+              <!-- <albedo>0.7 0.7 0.7 1</albedo> Light grey -->
               <metalness>0.0</metalness>
               <roughness>0.9</roughness>
             </metal>
@@ -109,7 +109,7 @@
           <diffuse>0.7 0.7 0.7 1</diffuse>
           <pbr>
             <metal>
-              <albedo>0.7 0.7 0.7 1</albedo> <!-- Light grey -->
+              <!-- <albedo>0.7 0.7 0.7 1</albedo> Light grey -->
               <metalness>0.0</metalness>
               <roughness>0.9</roughness>
             </metal>
