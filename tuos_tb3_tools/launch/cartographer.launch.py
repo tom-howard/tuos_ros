@@ -6,7 +6,7 @@ from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 from launch.substitutions import LaunchConfiguration, EqualsSubstitution, TextSubstitution
-from launch.conditions import IfCondition, LaunchConfigurationEquals
+from launch.conditions import IfCondition
 
 def generate_launch_description():
 
