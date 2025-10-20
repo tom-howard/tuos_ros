@@ -1,10 +1,10 @@
 #goal
-float32 sweep_angle    # the angular sweep (in degrees) over which to capture images 
-int32 image_count      # the number of images to capture during the sweep
+float32 sweep_angle   # Angular sweep (in degrees) over which to capture images 
+int32 image_count     # Number of images to capture during the sweep
 ---
 #result
-string image_path      # The filesystem location of the captured images
+string[] image_paths  # Full path to each of the captured images
 ---
 #feedback
-int32 current_image    # the number of images taken
-float32 current_angle  # the current angular position of the robot (in degrees)
+int32 current_image   # Number of images taken
+float32 current_angle # Current angular position of the robot (in degrees)

@@ -1,12 +1,5 @@
 #!/usr/bin/env python3
 
-"""
-Resources:
- - https://docs.ros.org/en/humble/Tutorials/Intermediate/Writing-an-Action-Server-Client/Py.html
- - https://github.com/ros2/examples/blob/humble/rclpy/actions/minimal_action_server/examples_rclpy_minimal_action_server/server.py
- - https://docs.ros.org/en/humble/How-To-Guides/Using-callback-groups.html
-"""
-
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionServer, GoalResponse, CancelResponse
@@ -19,17 +12,17 @@ import cv2
 from cv_bridge import CvBridge
 
 # Import all the necessary ROS message types:
-from tuos_interfaces.action import CameraSweep
-from sensor_msgs.msg import CompressedImage
+from tuos_interfaces.action import CameraSweepJazzy as CameraSweep
+from sensor_msgs.msg import Image
 
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import TwistStamped
 from nav_msgs.msg import Odometry
 from tuos_examples.tb3_tools import quaternion_to_euler
 
 # Import some other useful Python Modules
 from math import degrees
-import datetime as dt
 from pathlib import Path
+import shutil
 
 class CameraSweepActionServer(Node):
         
@@ -37,11 +30,11 @@ class CameraSweepActionServer(Node):
         super().__init__("camera_sweep_action_server_node")
 
         self.vel_pub = self.create_publisher(
-            msg_type=Twist,
+            msg_type=TwistStamped,
             topic="cmd_vel",
             qos_profile=10,
         )
-        self.vel_pub.publish(Twist())
+        self.vel_pub.publish(TwistStamped())
 
         self.odom_sub = self.create_subscription(
             msg_type=Odometry,
@@ -51,8 +44,8 @@ class CameraSweepActionServer(Node):
         )
         
         self.camera_sub = self.create_subscription(
-            msg_type=CompressedImage,
-            topic="/camera/image_raw/compressed",
+            msg_type=Image,
+            topic="/camera/image_raw",
             callback=self.camera_callback,
             qos_profile=10
         )
@@ -77,7 +70,7 @@ class CameraSweepActionServer(Node):
         
     def camera_callback(self, img_msg):
         cv_image = CvBridge()
-        img = cv_image.compressed_imgmsg_to_cv2(
+        img = cv_image.imgmsg_to_cv2(
             img_msg, desired_encoding="passthrough")
         self.current_camera_image = img
     
@@ -107,7 +100,7 @@ class CameraSweepActionServer(Node):
 
     def on_shutdown(self):
         for i in range(5):
-            self.vel_pub.publish(Twist())
+            self.vel_pub.publish(TwistStamped())
         self.shutdown = True
 
     def server_execution_callback(self, goal):
@@ -131,8 +124,8 @@ class CameraSweepActionServer(Node):
             f"\n#####\n")
         
         # set the robot's velocity:
-        vel_cmd = Twist()
-        vel_cmd.angular.z = turn_vel
+        vel_cmd = TwistStamped()
+        vel_cmd.twist.angular.z = turn_vel
         
         # Get the robot's current yaw angle:
         ref_yaw = self.yaw
@@ -140,14 +133,14 @@ class CameraSweepActionServer(Node):
         yaw_total = 0.0
         elapsed_time_seconds = 0.0
 
-        # Get the current date and time and create a timestamp string
-        # (to use when we construct the image filename):
-        start_time = dt.datetime.strftime(
-            dt.datetime.now(),'%Y%m%d_%H%M%S')
         self.base_image_path = Path.home().joinpath(
-            f"myrosdata/action_examples/{start_time}/")
-        result.image_path = str(self.base_image_path).replace(str(Path.home()), "~")
-                
+            f"ros_action_examples/")
+        if self.base_image_path.exists():
+            shutil.rmtree(self.base_image_path)
+        self.base_image_path.mkdir()
+        
+        result.image_paths = []
+
         img_num = 0
         start_time_ns = self.get_clock().now().nanoseconds
         while img_num < goal.request.image_count:
@@ -158,11 +151,11 @@ class CameraSweepActionServer(Node):
                     f"Cancelling the camera sweep at image {img_num} (of {goal.request.image_count})."
                 )
 
-                result.image_path = f"{result.image_path} [CANCELLED at image {img_num} (of {goal.request.image_count})]"                
+                result.image_paths.append(f"CANCELLED at image {img_num} (of {goal.request.image_count})")                
                 goal.canceled()
                 # stop the robot:
                 for i in range(5):
-                    self.vel_pub.publish(Twist())
+                    self.vel_pub.publish(TwistStamped())
                 return result
             
             yaw_inc = yaw_inc + abs(self.yaw - ref_yaw)
@@ -181,14 +174,17 @@ class CameraSweepActionServer(Node):
                 yaw_inc = 0.0
 
                 # save the most recently captured image:
-                self.base_image_path.mkdir(parents=True, exist_ok=True)
+                img_path = str(self.base_image_path.joinpath(f"img{img_num:02.0f}.jpg"))
                 cv2.imwrite(
-                    str(self.base_image_path.joinpath(f"img{img_num:03.0f}.jpg")),
+                    img_path,
                     self.current_camera_image
+                )
+                result.image_paths.append(
+                    img_path.replace(str(Path.home()), "~")
                 )
                 
         for i in range(5):
-            self.vel_pub.publish(Twist())
+            self.vel_pub.publish(TwistStamped())
 
         elapsed_time_seconds = (timestamp_ns - start_time_ns) * 1e-9
         self.get_logger().info(
