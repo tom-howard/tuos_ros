@@ -46,7 +46,9 @@ def generate_launch_description():
                 )
             ),
             launch_arguments={'gz_args': '-g -v1 '}.items(),
-            condition=IfCondition(LaunchConfiguration('with_gui'))
+            condition=IfCondition(
+                LaunchConfiguration('with_gui')
+            )
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
