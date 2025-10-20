@@ -12,7 +12,7 @@ import cv2
 from cv_bridge import CvBridge
 
 # Import all the necessary ROS message types:
-from tuos_interfaces.action import CameraSweepJazzy as CameraSweep
+from tuos_interfaces.action import CameraSweep
 from sensor_msgs.msg import Image
 
 from geometry_msgs.msg import TwistStamped
