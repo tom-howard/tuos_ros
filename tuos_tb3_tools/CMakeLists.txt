@@ -25,7 +25,6 @@ install(PROGRAMS
 install(DIRECTORY
   launch
   rviz
-  include
   DESTINATION share/${PROJECT_NAME}
 )
 

@@ -1,7 +1,6 @@
-from launch import LaunchDescription
-from launch_ros.actions import Node
-
 import os
+
+from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
@@ -15,8 +14,6 @@ def generate_launch_description():
         "launch"
     )
 
-    environ = LaunchConfiguration('environment', default='real')
-
     return LaunchDescription([
         DeclareLaunchArgument(
             'environment', 
@@ -27,22 +24,28 @@ def generate_launch_description():
             PythonLaunchDescriptionSource( 
                 os.path.join( 
                     this_launch_dir, 
-                    "slam_real.launch.py" 
+                    "_slam_real" 
                 )
             ),
             condition=IfCondition(
-                EqualsSubstitution(environ, TextSubstitution(text='real'))
+                EqualsSubstitution(
+                    LaunchConfiguration('environment'), 
+                    TextSubstitution(text='real')
+                )
             )
         ),
         IncludeLaunchDescription( 
             PythonLaunchDescriptionSource( 
                 os.path.join( 
                     this_launch_dir, 
-                    "slam_sim.launch.py" 
+                    "_slam_sim" 
                 )
             ),
             condition=IfCondition(
-                EqualsSubstitution(environ, TextSubstitution(text='sim'))
+                EqualsSubstitution(
+                    LaunchConfiguration('environment'),
+                    TextSubstitution(text='sim')
+                )
             )
         ),
 
