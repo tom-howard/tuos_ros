@@ -2,7 +2,7 @@
 <sdf version="1.4">
 <model name="line_following_track">
   <static>true</static>
-    <link name="link">
+    <link name="floor">
       <collision name="collision">
         <geometry>
           <plane>
@@ -28,11 +28,14 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>model://line_following_track/materials/scripts</uri>
-            <uri>model://line_following_track/materials/textures</uri>
-            <name>LineFollowingTrack/Image</name>
-          </script>
+          <diffuse>0.7 0.7 0.7 1</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/line_following_track.png</albedo_map>
+              <metalness>0.0</metalness>
+              <roughness>0.5</roughness>
+            </metal>
+          </pbr>
         </material>
       </visual>
     </link>
