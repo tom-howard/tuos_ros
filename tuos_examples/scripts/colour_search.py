@@ -10,7 +10,7 @@ from cv_bridge import CvBridge, CvBridgeError
 
 # Import necessary ROS interface types:
 from sensor_msgs.msg import Image
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import TwistStamped
 
 class ColourSearch(Node):
 
@@ -25,7 +25,7 @@ class ColourSearch(Node):
         )
         
         self.vel_pub = self.create_publisher(
-            msg_type=Twist,
+            msg_type=TwistStamped,
             topic="/cmd_vel",
             qos_profile=10
         )
@@ -39,8 +39,8 @@ class ColourSearch(Node):
 
         self.turn_vel_fast = -0.5
         self.turn_vel_slow = -0.1
-        self.vel_cmd = Twist()
-        self.vel_cmd.angular.z = self.turn_vel_fast
+        self.vel_cmd = TwistStamped()
+        self.vel_cmd.twist.angular.z = self.turn_vel_fast
 
         self.move_rate = "" # fast, slow, stop
         self.stop_counter = 0
@@ -56,7 +56,7 @@ class ColourSearch(Node):
         )
         cv2.destroyAllWindows()
         for i in range(5):
-            self.vel_pub.publish(Twist())
+            self.vel_pub.publish(TwistStamped())
         self.shutdown = True
     
     def camera_callback(self, img_data):
@@ -108,28 +108,28 @@ class ColourSearch(Node):
                 "\nMOVING FAST:\n"
                 "I can't see anything at the moment, scanning the area..."
             )
-            self.vel_cmd.angular.z = self.turn_vel_fast
+            self.vel_cmd.twist.angular.z = self.turn_vel_fast
             
         elif self.move_rate == 'slow':
             self.get_logger().info(
                 f"\nMOVING SLOW:\n"
                 f"A blob of colour of size {self.m00:.0f} pixels is in view at y-position: {self.cy:.0f} pixels."
             )
-            self.vel_cmd.angular.z = self.turn_vel_slow
+            self.vel_cmd.twist.angular.z = self.turn_vel_slow
         
         elif self.move_rate == 'stop' and self.stop_counter > 0:
             self.get_logger().info(
                 f"\nSTOPPED:\n"
                 f"The blob of colour is now dead-ahead at y-position {self.cy:.0f} pixels... Counting down: {self.stop_counter}"
             )
-            self.vel_cmd.angular.z = 0.0
+            self.vel_cmd.twist.angular.z = 0.0
         
         else:
             self.get_logger().info(
                 f"\nMOVING SLOW:\n"
                 f"A blob of colour of size {self.m00:.0f} pixels is in view at y-position: {self.cy:.0f} pixels."
             )
-            self.vel_cmd.angular.z = self.turn_vel_slow
+            self.vel_cmd.twist.angular.z = self.turn_vel_slow
         
         self.vel_pub.publish(self.vel_cmd)
             
