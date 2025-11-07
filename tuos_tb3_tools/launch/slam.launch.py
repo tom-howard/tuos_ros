@@ -24,7 +24,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource( 
                 os.path.join( 
                     this_launch_dir, 
-                    "_slam_real" 
+                    "_slam_real.launch.py" 
                 )
             ),
             condition=IfCondition(
@@ -38,7 +38,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource( 
                 os.path.join( 
                     this_launch_dir, 
-                    "_slam_sim" 
+                    "_slam_sim.launch.py" 
                 )
             ),
             condition=IfCondition(
