@@ -12,11 +12,11 @@ from launch.conditions import IfCondition
 def generate_launch_description():
 
     gz_ros = os.path.join(
-        get_package_share_directory('gazebo_ros'), 'launch'
+        get_package_share_directory('ros_gz_sim'), 'launch'
     )
     world = os.path.join(
-        get_package_share_directory('com2009_simulations'), 'worlds',
-        'arena.world'
+        get_package_share_directory('tuos_task_sims'), 'worlds',
+        'empty_arena.world'
     )
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
@@ -26,11 +26,6 @@ def generate_launch_description():
     
     return LaunchDescription([
         DeclareLaunchArgument(
-            'with_robot', 
-            description="Select whether to spawn a robot into the world or not.",
-            default_value='true'
-        ),
-        DeclareLaunchArgument(
             'with_gui', 
             description="Select whether to launch Gazebo with or without Gazebo Client (i.e. the GUI).",
             default_value='true'
@@ -39,19 +34,22 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(
                 os.path.join(
                     gz_ros,
-                    'gzserver.launch.py'
+                    'gz_sim.launch.py'
                 )
             ),
-            launch_arguments={'world': world}.items(),
+            launch_arguments={'gz_args': ['-r -s -v1 ', world], 'on_exit_shutdown': 'true'}.items(),
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(
                     gz_ros,
-                    'gzclient.launch.py'
+                    'gz_sim.launch.py'
                 )
             ),
-            condition=IfCondition(LaunchConfiguration('with_gui', default="true"))
+            launch_arguments={'gz_args': '-g -v1 '}.items(),
+            condition=IfCondition(
+                LaunchConfiguration('with_gui')
+            )
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -75,10 +73,7 @@ def generate_launch_description():
                 'x_pose': x_pose,
                 'y_pose': y_pose,
                 'yaw': yaw
-            }.items(),
-            condition=IfCondition(
-                LaunchConfiguration('with_robot')
-            )
+            }.items()
         )
     ])
     
