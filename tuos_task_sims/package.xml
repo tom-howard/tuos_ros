@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>com2009_simulations</name>
+  <name>tuos_task_sims</name>
   <version>0.0.1</version>
   <description>
-    Simulation package for COM2009 Assignment #2
+    Simulation resources for ROS 2 Course Assignments
   </description>
   <maintainer email="t.howard@sheffield.ac.uk">Tom Howard</maintainer>
   <license>TODO</license>

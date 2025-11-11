@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(com2009_simulations)
+project(tuos_task_sims)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)

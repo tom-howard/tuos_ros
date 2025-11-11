@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<sdf version="1.4">
+<model name="twelve_zone_floor">
+  <static>true</static>
+    <link name="floor">
+      <collision name="collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>4.0 4.0</size>
+          </plane>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="visual">
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>4.0 4.0</size>
+          </plane>
+        </geometry>
+        <material>
+          <diffuse>0.7 0.7 0.7 1</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/floor.png</albedo_map>
+              <metalness>0.0</metalness>
+              <roughness>0.5</roughness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link> 
+  </model>
+</sdf>

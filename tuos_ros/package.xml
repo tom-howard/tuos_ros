@@ -17,7 +17,7 @@
   <exec_depend>tuos_examples</exec_depend>
   <exec_depend>tuos_interfaces</exec_depend>
   <exec_depend>tuos_simulations</exec_depend>
-  <exec_depend>com2009_simulations</exec_depend>
+  <exec_depend>tuos_task_sims</exec_depend>
   <exec_depend>tuos_tb3_tools</exec_depend>
     
   <export>
