@@ -28,13 +28,7 @@ install(PROGRAMS
   scripts/image_colours.py
   scripts/colour_search.py
   scripts/number_game.py
-  scripts/param_publisher.py
   DESTINATION lib/${PROJECT_NAME}
-)
-
-install(DIRECTORY 
-  launch
-  DESTINATION share/${PROJECT_NAME}
 )
 
 ament_package()
