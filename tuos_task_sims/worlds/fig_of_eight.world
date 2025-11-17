@@ -2,25 +2,39 @@
 <sdf version="1.6">
   <world name="default">
 
-    <!-- <include>
-      <uri>model://ground_plane</uri>
-    </include> -->
+    <plugin
+      filename="gz-sim-physics-system"
+      name="gz::sim::systems::Physics">
+    </plugin>
+    <plugin
+      filename="gz-sim-user-commands-system"
+      name="gz::sim::systems::UserCommands">
+    </plugin>
+    <plugin
+      filename="gz-sim-scene-broadcaster-system"
+      name="gz::sim::systems::SceneBroadcaster">
+    </plugin>
+    <plugin
+      filename="gz-sim-sensors-system"
+      name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin
+      filename="gz-sim-imu-system"
+      name="gz::sim::systems::Imu">
+    </plugin>
 
     <include>
-      <uri>model://sun</uri>
+      <uri>model://fig_eight_floor</uri>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sun</uri>
     </include>
 
     <scene>
       <shadows>false</shadows>
     </scene>
-
-    <gui fullscreen='0'>
-      <camera name='user_camera'>
-        <pose frame=''>-2.77 3.39 2.99 0 0.68 -0.88</pose>
-        <view_controller>orbit</view_controller>
-        <projection_type>perspective</projection_type>
-      </camera>
-    </gui>
 
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
@@ -48,7 +62,13 @@
     </include>
 
     <include>
-      <uri>model://task1</uri>
+      <uri>model://beacon_blue</uri>
+      <pose>0 -0.5 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://beacon_red</uri>
+      <pose>0 0.5 0 0 0 0</pose>
     </include>
 
   </world>
