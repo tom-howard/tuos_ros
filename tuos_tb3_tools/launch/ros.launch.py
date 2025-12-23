@@ -11,6 +11,14 @@ def generate_launch_description():
     realsense2_camera_pkg = get_package_share_directory('realsense2_camera')
 
     # Launch arguments for realsense2_camera
+    """
+    default values (shared by depth and colour):
+    Resolution	| Frame Rate(s)
+    1280 x 720	| 6, 15, 30
+    848 x 480	| 6, 15, 30, 60, 90
+    640 x 480	| 6, 15, 30, 60, 90
+    640 x 360	| 6, 15, 30, 60, 90
+    """
     output = LaunchConfiguration('output', default='log')
     color_profile = LaunchConfiguration('color_profile', default='640x480x15')
     depth_profile = LaunchConfiguration('depth_profile', default='640x480x15')
