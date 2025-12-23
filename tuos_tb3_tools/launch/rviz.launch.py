@@ -23,7 +23,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource( 
                 os.path.join( 
                     launch_dir, 
-                    "_rviz_real" 
+                    "_rviz_real.launch.py" 
                 )
             ),
             condition=IfCondition(
@@ -37,7 +37,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource( 
                 os.path.join( 
                     launch_dir, 
-                    "_rviz_sim" 
+                    "_rviz_sim.launch.py" 
                 )
             ),
             condition=IfCondition(
