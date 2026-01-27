@@ -1,7 +1,7 @@
 from launch import LaunchDescription
 from ament_index_python.packages import get_package_share_directory
-from launch_ros.actions import Node  # Import for ROS 2 nodes
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch_ros.actions import Node
+from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 
@@ -19,9 +19,10 @@ def generate_launch_description():
     640 x 480	| 6, 15, 30, 60, 90
     640 x 360	| 6, 15, 30, 60, 90
     """
+    profile='640x360x6' # formerly '640x480x15'
     output = LaunchConfiguration('output', default='log')
-    color_profile = LaunchConfiguration('color_profile', default='640x480x15')
-    depth_profile = LaunchConfiguration('depth_profile', default='640x480x15')
+    color_profile = LaunchConfiguration('color_profile', default=profile)
+    depth_profile = LaunchConfiguration('depth_profile', default=profile)
     enable_depth = LaunchConfiguration('enable_depth', default='false')
     camera_namespace = LaunchConfiguration('camera_namespace', default='')
     color_qos = LaunchConfiguration('color_qos', default='SENSOR_DATA')
