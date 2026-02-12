@@ -19,7 +19,7 @@ def generate_launch_description():
     640 x 480	| 6, 15, 30, 60, 90
     640 x 360	| 6, 15, 30, 60, 90
     """
-    profile='640x360x6' # formerly '640x480x15'
+    profile='640x480x15' 
     output = LaunchConfiguration('output', default='log')
     color_profile = LaunchConfiguration('color_profile', default=profile)
     depth_profile = LaunchConfiguration('depth_profile', default=profile)
