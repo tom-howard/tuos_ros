@@ -6,20 +6,21 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
-from launch.conditions import IfCondition, LaunchConfigurationEquals
+from launch.substitutions import LaunchConfiguration, EqualsSubstitution
+from launch.conditions import IfCondition
 
 def generate_launch_description():
 
     gz_ros = os.path.join(
-        get_package_share_directory('gazebo_ros'), 'launch'
+        get_package_share_directory('ros_gz_sim'), 'launch'
     )
     world = os.path.join(
-        get_package_share_directory('tuos_simulations'), 'worlds','beaconing.world'
+        get_package_share_directory('tuos_task_sims'), 'worlds','beaconing.world'
     )
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
-    with_gui = LaunchConfiguration('with_gui')
+    with_gui = LaunchConfiguration('with_gui', default='true')
+    start_zone = LaunchConfiguration('start_zone', default='a')
     
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -36,19 +37,27 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(
                 os.path.join(
                     gz_ros,
-                    'gzserver.launch.py'
+                    'gz_sim.launch.py'
                 )
             ),
-            launch_arguments={'world': world}.items(),
+            launch_arguments={
+                'gz_args': ['-r -s -v1 ', world], 
+                'on_exit_shutdown': 'true'
+            }.items(),
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(
                     gz_ros,
-                    'gzclient.launch.py'
+                    'gz_sim.launch.py'
                 )
             ),
-            condition=IfCondition(with_gui)
+            launch_arguments={
+                'gz_args': '-g -v1 '
+            }.items(),
+            condition=IfCondition(
+                with_gui
+            )
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -58,7 +67,9 @@ def generate_launch_description():
                     'robot_state_publisher.launch.py'
                 )
             ),
-            launch_arguments={'use_sim_time': use_sim_time}.items()
+            launch_arguments={
+                'use_sim_time': use_sim_time
+            }.items()
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -69,11 +80,19 @@ def generate_launch_description():
                 )
             ),
             launch_arguments={
-                'x_pose': LaunchConfiguration('x_pose', default='-2.06729'),
-                'y_pose': LaunchConfiguration('y_pose', default='-1.97396'),
-                'yaw': LaunchConfiguration('yaw', default='1.571')
+                'x_pose': LaunchConfiguration(
+                    'x_pose', default='-2.06729'
+                ),
+                'y_pose': LaunchConfiguration(
+                    'y_pose', default='-1.97396'
+                ),
+                'yaw': LaunchConfiguration(
+                    'yaw', default='1.571'
+                )
             }.items(),
-            condition=LaunchConfigurationEquals('start_zone','a')
+            condition=IfCondition(
+                EqualsSubstitution(start_zone, 'a')
+            )
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -84,11 +103,19 @@ def generate_launch_description():
                 )
             ),
             launch_arguments={
-                'x_pose': LaunchConfiguration('x_pose', default='-1.24044'),
-                'y_pose': LaunchConfiguration('y_pose', default='2.06729'),
-                'yaw': LaunchConfiguration('yaw', default='3.142')
+                'x_pose': LaunchConfiguration(
+                    'x_pose', default='-1.24044'
+                ),
+                'y_pose': LaunchConfiguration(
+                    'y_pose', default='2.06729'
+                ),
+                'yaw': LaunchConfiguration(
+                    'yaw', default='3.142'
+                )
             }.items(),
-            condition=LaunchConfigurationEquals('start_zone','b')
+            condition=IfCondition(
+                EqualsSubstitution(start_zone, 'b')
+            )
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -99,11 +126,19 @@ def generate_launch_description():
                 )
             ),
             launch_arguments={
-                'x_pose': LaunchConfiguration('x_pose', default='2.06729'),
-                'y_pose': LaunchConfiguration('y_pose', default='1.97396'),
-                'yaw': LaunchConfiguration('yaw', default='-1.571')
+                'x_pose': LaunchConfiguration(
+                    'x_pose', default='2.06729'
+                ),
+                'y_pose': LaunchConfiguration(
+                    'y_pose', default='1.97396'
+                ),
+                'yaw': LaunchConfiguration(
+                    'yaw', default='-1.571'
+                )
             }.items(),
-            condition=LaunchConfigurationEquals('start_zone','c')
+            condition=IfCondition(
+                EqualsSubstitution(start_zone, 'c')
+            )
         )
     ])
     
