@@ -63,92 +63,98 @@
 
     <include>
       <uri>model://wooden_wall_long</uri>
-      <name>long_wall_a2</name>
-      <pose>1.23917 0.82209 0 0 0 1.5708</pose>
+      <name>01_long_wall_a1</name>
+      <pose>1.04130 1.12541 0.0 0.0 0.0 -0.7854</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_long</uri>
-      <name>long_wall_a3</name>
-      <pose>1.48 -0.56609 0 0 0 0</pose>
+      <name>02_long_wall_a2</name>
+      <pose>1.04130 0.49609 0.0 0.0 0.0 0.7854</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_long</uri>
-      <name>long_wall_a4</name>
-      <pose>1.035 -1.01109 0 0 0 1.5708</pose>
+      <name>03_long_wall_a3</name>
+      <pose>1.48000 -0.56609 0.0 0.0 0.0 0.0000</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_long</uri>
-      <name>long_wall_b2</name>
-      <pose>0.79418 0.37709 0 0 0 0</pose>
+      <name>04_long_wall_a4</name>
+      <pose>1.03500 -1.01109 0.0 0.0 0.0 1.5708</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
-      <name>short_wall_b3a</name>
-      <pose>0.305 -0.425 0 0 0 0</pose>
+      <name>05_short_wall_b2</name>
+      <pose>0.56754 0.34053 0.0 0.0 0.0 -0.7854</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
-      <name>short_wall_b3b</name>
-      <pose>0.08 -0.65 0 0 0 1.5708</pose>
+      <name>06_short_wall_b3</name>
+      <pose>0.30500 -0.42500 0.0 0.0 0.0 0.0000</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
-      <name>short_wall_c1</name>
-      <pose>-0.81 1.415 0 0 0 0</pose>
+      <name>07_short_wall_b3</name>
+      <pose>0.08000 -0.65000 0.0 0.0 0.0 1.5708</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
-      <name>short_wall_c2</name>
-      <pose>-0.01219 0.98 0 0 0 0</pose>
+      <name>08_short_wall_c1</name>
+      <pose>-0.81000 1.41500 0.0 0.0 0.0 0.0000</pose>
+    </include>
+
+    <include>
+      <uri>model://wooden_wall_short</uri>
+      <name>09_short_wall_c1</name>
+      <pose>-0.04416 1.08933 0.0 0.0 0.0 0.5236</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_long</uri>
-      <name>long_wall_c2</name>
-      <pose>-0.23719 0.535 0 0 0 1.5708</pose>
+      <name>10_long_wall_c2</name>
+      <pose>-0.23719 0.53500 0.0 0.0 0.0 1.5708</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
-      <name>short_wall_c3</name>
-      <pose>-0.145 -0.425 0 0 0 0</pose>
+      <name>11_short_wall_c3</name>
+      <pose>-0.14500 -0.42500 0.0 0.0 0.0 0.0000</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_long</uri>
-      <name>long_wall_c3</name>
-      <pose>-0.97289 -1.00 0 0 0 0</pose>
+      <name>12_long_wall_c3</name>
+      <pose>-0.97289 -1.00000 0.0 0.0 0.0 0.0000</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
-      <name>short_wall_c4</name>
-      <pose>-0.52789 -1.225 0 0 0 1.5708</pose>
+      <name>13_short_wall_c4</name>
+      <pose>-0.52789 -1.22500 0.0 0.0 0.0 1.5708</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
-      <name>short_wall_d1</name>
-      <pose>-1.035 1.19 0 0 0 1.5708</pose>
+      <name>14_short_wall_d1</name>
+      <pose>-1.03500 1.19000 0.0 0.0 0.0 1.5708</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
-      <name>short_wall_d2</name>
-      <pose>-1.035 0.225 0 0 0 1.5708</pose>
+      <name>15_short_wall_d2</name>
+      <pose>-1.03500 0.22500 0.0 0.0 0.0 1.5708</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_long</uri>
-      <name>long_wall_d2</name>
-      <pose>-1.48 0 0 0 0 0</pose>
+      <name>16_long_wall_d2</name>
+      <pose>-1.48000 0.00000 0.0 0.0 0.0 0.0000</pose>
     </include>
 
     <include>
