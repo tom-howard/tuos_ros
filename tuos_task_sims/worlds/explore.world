@@ -64,117 +64,99 @@
     <include>
       <uri>model://wooden_wall_long</uri>
       <name>01_long_wall_a1</name>
-      <pose>1.04130 1.12541 0.0 0.0 0.0 -0.7854</pose>
+      <pose>1.12933 1.12933 0.0 0.0 0.0 -0.7854</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_long</uri>
       <name>02_long_wall_a2</name>
-      <pose>1.04130 0.49609 0.0 0.0 0.0 0.7854</pose>
+      <pose>1.12933 0.50000 0.0 0.0 0.0 0.7854</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_long</uri>
       <name>03_long_wall_a3</name>
-      <pose>1.48000 -0.56609 0.0 0.0 0.0 0.0000</pose>
+      <pose>1.48000 -0.50000 0.0 0.0 0.0 0.0000</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_long</uri>
-      <name>04_long_wall_a4</name>
-      <pose>1.03500 -1.01109 0.0 0.0 0.0 1.5708</pose>
+      <name>04_long_wall_a3</name>
+      <pose>1.03500 -0.94500 0.0 0.0 0.0 1.5708</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
       <name>05_short_wall_b2</name>
-      <pose>0.56754 0.34053 0.0 0.0 0.0 -0.7854</pose>
+      <pose>0.65556 0.34444 0.0 0.0 0.0 -0.7854</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
       <name>06_short_wall_b3</name>
-      <pose>0.30500 -0.42500 0.0 0.0 0.0 0.0000</pose>
+      <pose>0.00000 -0.28000 0.0 0.0 0.0 1.5708</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
       <name>07_short_wall_b3</name>
-      <pose>0.08000 -0.65000 0.0 0.0 0.0 1.5708</pose>
+      <pose>0.15709 -0.65926 0.0 0.0 0.0 -0.7854</pose>
     </include>
 
     <include>
-      <uri>model://wooden_wall_short</uri>
-      <name>08_short_wall_c1</name>
-      <pose>-0.81000 1.41500 0.0 0.0 0.0 0.0000</pose>
+      <uri>model://wooden_wall_long</uri>
+      <name>08_long_wall_c1</name>
+      <pose>-0.65374 1.38673 0.0 0.0 0.0 0.0000</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
       <name>09_short_wall_c1</name>
-      <pose>-0.04416 1.08933 0.0 0.0 0.0 0.5236</pose>
+      <pose>-0.10437 1.19073 0.0 0.0 0.0 -1.0734</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_long</uri>
-      <name>10_long_wall_c2</name>
-      <pose>-0.23719 0.53500 0.0 0.0 0.0 1.5708</pose>
+      <name>10_long_wall_c3</name>
+      <pose>-0.94500 -1.00000 0.0 0.0 0.0 0.0000</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
-      <name>11_short_wall_c3</name>
-      <pose>-0.14500 -0.42500 0.0 0.0 0.0 0.0000</pose>
-    </include>
-
-    <include>
-      <uri>model://wooden_wall_long</uri>
-      <name>12_long_wall_c3</name>
-      <pose>-0.97289 -1.00000 0.0 0.0 0.0 0.0000</pose>
+      <name>11_short_wall_c4</name>
+      <pose>-0.50000 -1.22500 0.0 0.0 0.0 1.5708</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_short</uri>
-      <name>13_short_wall_c4</name>
-      <pose>-0.52789 -1.22500 0.0 0.0 0.0 1.5708</pose>
-    </include>
-
-    <include>
-      <uri>model://wooden_wall_short</uri>
-      <name>14_short_wall_d1</name>
-      <pose>-1.03500 1.19000 0.0 0.0 0.0 1.5708</pose>
-    </include>
-
-    <include>
-      <uri>model://wooden_wall_short</uri>
-      <name>15_short_wall_d2</name>
+      <name>12_short_wall_d2</name>
       <pose>-1.03500 0.22500 0.0 0.0 0.0 1.5708</pose>
     </include>
 
     <include>
       <uri>model://wooden_wall_long</uri>
-      <name>16_long_wall_d2</name>
+      <name>13_long_wall_d2</name>
       <pose>-1.48000 0.00000 0.0 0.0 0.0 0.0000</pose>
     </include>
 
     <include>
       <uri>model://beacon_green</uri>
-      <pose>1.8 1.8 0 0 0 0</pose>
+      <pose>1.81 1.81 0 0 0 0</pose>
     </include>
 
     <include>
       <uri>model://beacon_yellow</uri>
-      <pose>1.17 -0.7 0 0 0 0</pose>
+      <pose>1.155 -0.62 0 0 0 0</pose>
     </include>
 
     <include>
       <uri>model://beacon_blue</uri>
-      <pose>-0.91 1.29 0 0 0 0</pose>
+      <pose>-0.28264 1.26673 0 0 0 0</pose>
     </include>
 
     <include>
       <uri>model://beacon_red</uri>
-      <pose>-0.655 -1.13 0 0 0 0</pose>
+      <pose>-0.62 -1.12 0 0 0 0</pose>
     </include>
 
   </world>
